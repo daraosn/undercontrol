@@ -13,5 +13,23 @@
 //= require jquery
 //= require payola
 //= require jquery_ujs
+//= require bootstrap_sb_admin_base_v2
 //= require bootstrap-sprockets
 //= require_tree .
+
+
+  $(function() {
+
+    setTimeout(function() { location.reload()  }, 200);
+
+      Morris.Line({
+          element: 'morris-area-chart',
+          data: window.data,
+          xkey: 'created_at',
+          ykeys: ['value'],
+          labels: ['Value'],
+          hideHover: 'auto',
+          resize: true
+      });
+
+  });

@@ -52,6 +52,7 @@ GEM
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    bootstrap_sb_admin_base_v2 (0.1.1)
     builder (3.2.2)
     byebug (8.2.2)
     capybara (2.6.2)
@@ -289,6 +290,7 @@ PLATFORMS
 DEPENDENCIES
   better_errors
   bootstrap-sass
+  bootstrap_sb_admin_base_v2
   byebug
   capybara
   coffee-rails (~> 4.1.0)

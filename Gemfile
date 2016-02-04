@@ -6,6 +6,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
+gem 'bootstrap_sb_admin_base_v2'
+
 group :development, :test do
   gem 'byebug'
 end
