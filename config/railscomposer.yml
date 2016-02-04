@@ -1,0 +1,31 @@
+# This application was generated with Rails Composer
+
+development:
+  apps4: rails-stripe-membership-saas
+  announcements: none
+  dev_webserver: thin
+  prod_webserver: unicorn
+  database: sqlite
+  templates: erb
+  tests: rspec
+  continuous_testing: none
+  frontend: bootstrap3
+  email: smtp
+  authentication: devise
+  devise_modules: false
+  omniauth_provider: 
+  authorization: roles
+  form_builder: false
+  pages: about+users
+  layouts: landing_page
+  locale: none
+  analytics: 
+  deployment: 
+  ban_spiders: 
+  github: 
+  local_env_file: false
+  quiet_assets: true
+  better_errors: true
+  pry: false
+  rvmrc: 
+  dashboard: upmin
