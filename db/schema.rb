@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20160231233554) do
   create_table "measurements", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "value"
+    t.decimal  "value",      precision: 3, scale: 10
   end
 
   create_table "payola_affiliates", force: :cascade do |t|

@@ -37,7 +37,8 @@
 #= require_tree .
 
 $ ->
-  window.realtimePoints = 1000
+  window.realtimeInterval = 50 # refresh rate
+  window.realtimePoints = 12000 # last 10 mins at 50ms refresh rate
   window.realtimePeaks = false
   window.lastValue = null
   window.historicData = []
@@ -63,6 +64,7 @@ $ ->
       success: (data) ->
         window.historicData = data
         chart.setData window.historicData
+        window.lastValue = _(data).last()?.value
         return
 
   # setInterval pollData, 250
@@ -139,7 +141,7 @@ $ ->
         show: true
     )
 
-  setInterval updatePlot, 40
+  setInterval updatePlot, window.realtimeInterval
 
 
   ###

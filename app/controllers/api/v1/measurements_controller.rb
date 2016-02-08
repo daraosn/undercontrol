@@ -2,6 +2,12 @@ class Api::V1::MeasurementsController < ApplicationController
 
   def create
     unless params["value"].blank?
+      # Heroku restriction
+      count = Measurement.count
+      heroku_limit = 6500 # supports 10000 but to avoid mails 6500
+      if count > heroku_limit
+        Measurement.order(:id).limit(count - heroku_limit).destroy_all
+      end
       @measurement = Measurement.create value: params["value"]
       Pusher.trigger('measurements', 'new', @measurement.as_json)
     end
