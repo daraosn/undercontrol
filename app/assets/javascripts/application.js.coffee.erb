@@ -1,0 +1,164 @@
+# This is a manifest file that'll be compiled into application.js, which will include all the files
+# listed below.
+#
+# Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
+# or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
+#
+# It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+# compiled file.
+#
+# Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
+# about supported directives.
+#
+#= require jquery
+#= require underscore
+#= require payola
+#= require jquery_ujs
+#= require bootstrap-sprockets
+#
+#= require sb-admin/jquery.metisMenu
+#= require sb-admin/jquery.dataTables
+#= require sb-admin/dataTables.bootstrap
+#= require sb-admin/jquery.flot
+#= require sb-admin/jquery.flot.pie
+#= require sb-admin/jquery.flot.resize
+#= require sb-admin/jquery.flot.tooltip.min
+#= require sb-admin/raphael-2.1.0.min
+#= require sb-admin/morris
+#= require sb-admin/sb-admin
+#
+#= require sb-admin/excanvas.min
+#= require sb-admin/jquery.flot
+#= require sb-admin/jquery.flot.pie
+#= require sb-admin/jquery.flot.resize
+# require sb-admin/jquery.flot.time
+#= require sb-admin/jquery.flot.tooltip.min
+#
+#= require_tree .
+
+$ ->
+  window.realtimePoints = 1000
+  window.realtimePeaks = false
+  window.lastValue = null
+  window.historicData = []
+  window.realtimeData = (0 for i in [0..window.realtimePoints-1])
+
+  ###
+  # Morris Chart
+  ###
+
+  chart = Morris.Line
+    element: 'morris-area-chart'
+    data: []
+    xkey: 'created_at'
+    ykeys: [ 'value' ]
+    labels: [ 'Value' ]
+    hideHover: 'auto'
+    resize: true
+    smooth: false
+
+  pollData = ->
+    $.ajax
+      url: '/api/v1/measurements'
+      success: (data) ->
+        window.historicData = data
+        chart.setData window.historicData
+        return
+
+  # setInterval pollData, 250
+  pollData()
+
+  ###
+  # Flot Chart
+  ###
+  flotContainer = $('#flot-line-chart-moving')
+  # Determine how many data points to keep based on the placeholder's initial size;
+  # this gives us a nice high-res plot while avoiding more than one point per pixel.
+  maximum = flotContainer.outerWidth() / 2 or 300
+  #
+
+  generateFlotRealtimeData = ->
+    points = []
+    for i in [0..window.realtimeData.length - 1]
+      points.push [i, window.realtimeData[i]]
+    series = [{
+      data: points
+      lines:
+        fill: true
+    }]
+    return series
+
+  generateMorrisRealtimeData = ->
+    
+
+  # series = [ {
+  #   data: generateFlotRealtimeData()
+  #   lines: fill: true
+  # } ]
+
+  updatePlot = ->
+    window.realtimeData = window.realtimeData.slice(1)
+    window.realtimeData.push(window.lastValue or 0)
+    window.lastValue = 0 if window.realtimePeaks
+    # chart.setData generateMorrisRealtimeData()
+    # return
+    window.plot = $.plot(flotContainer, generateFlotRealtimeData(),
+      grid:
+        borderWidth: 1
+        minBorderMargin: 20
+        labelMargin: 10
+        backgroundColor: colors: [
+          '#fff'
+          '#e4f4f4'
+        ]
+        margin:
+          top: 20
+          bottom: 20
+          left: 20
+        markings: (axes) ->
+          markings = []
+          xaxis = axes.xaxis
+          x = Math.floor(xaxis.min)
+          while x < xaxis.max
+            markings.push
+              xaxis:
+                from: x
+                to: x + xaxis.tickSize
+              color: 'rgba(232, 232, 255, 0.2)'
+            x += xaxis.tickSize * 2
+          markings
+      xaxis:
+        tickFormatter: -> ''
+      yaxis:
+        # TODO: use this method or find a better way for min/max
+        # min: _.min window.realtimeData
+        # max: _.max window.realtimeData
+        min: _.max(window.realtimeData) * 0.8
+        max: _.max(window.realtimeData) * 1.25
+      legend:
+        show: true
+    )
+
+  setInterval updatePlot, 40
+
+
+  ###
+  # Pusher
+  ###
+
+  # Enable pusher logging - don't include this in production
+
+<% if Rails.env.development? %>
+  Pusher.log = (message) ->
+    if window.console and window.console.log
+      window.console.log message
+    return
+<% end %>
+
+  pusher = new Pusher('b35a4fcab94f68f53468', encrypted: true)
+  channel = pusher.subscribe('measurements')
+  channel.bind 'new', (point) ->
+    window.lastValue = point.value
+    window.historicData.push point
+    chart.setData window.historicData
+    return
