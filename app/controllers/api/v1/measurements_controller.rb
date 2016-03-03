@@ -15,10 +15,33 @@ class Api::V1::MeasurementsController < ApplicationController
   end
 
   def index
-    render json: Measurement.all
+    fields = [:created_at, :value]
+    @measurements = Measurement.all.select(fields)
+    respond_to do |format|
+      format.json {
+        render json: @measurements
+      }
+      format.csv {
+        render text: create_csv(@measurements, fields)
+      }
+    end
     #render json: Measurement.where("strftime('%H', created_at) >= ?", Time.zone.now.hour)
     #render json: Measurement.where("HOUR(created_at) = ?", Time.zone.now.hour)
     #render json: Measurement.where("created_at >= ?", Time.zone.now.beginning_of_day)
+  end
+
+  private
+  def create_csv data, fields, separator = ','
+    csv = fields.join(separator) + "\n"
+    data.each do |value|
+      line = []
+      fields.each do |field|
+        escaped_value = value[field].to_s.gsub('"', '\"')
+        line << "#{escaped_value}"
+      end
+      csv += line.join(separator) + "\n"
+    end
+    csv
   end
 
 end

@@ -16,25 +16,29 @@
 #= require jquery_ujs
 #= require bootstrap-sprockets
 #
-#= require sb-admin/jquery.metisMenu
-#= require sb-admin/jquery.dataTables
-#= require sb-admin/dataTables.bootstrap
+# require sb-admin/jquery.metisMenu
+# require sb-admin/jquery.dataTables
+# require sb-admin/dataTables.bootstrap
 #= require sb-admin/jquery.flot
 #= require sb-admin/jquery.flot.pie
 #= require sb-admin/jquery.flot.resize
 #= require sb-admin/jquery.flot.tooltip.min
-#= require sb-admin/raphael-2.1.0.min
-#= require sb-admin/morris
-#= require sb-admin/sb-admin
+# require sb-admin/raphael-2.1.0.min
+# require sb-admin/morris
+# require sb-admin/sb-admin
 #
-#= require sb-admin/excanvas.min
-#= require sb-admin/jquery.flot
-#= require sb-admin/jquery.flot.pie
-#= require sb-admin/jquery.flot.resize
+# require sb-admin/excanvas.min
+# require sb-admin/jquery.flot
+# require sb-admin/jquery.flot.pie
+# require sb-admin/jquery.flot.resize
 # require sb-admin/jquery.flot.time
-#= require sb-admin/jquery.flot.tooltip.min
+# require sb-admin/jquery.flot.tooltip.min
 #
-#= require_tree .
+#= require Chart
+#= require raphael
+#= require morris
+#= require dygraph-combined
+# require_tree .
 
 $ ->
   window.realtimeInterval = 50 # refresh rate
@@ -45,43 +49,72 @@ $ ->
   window.realtimeData = (0 for i in [0..window.realtimePoints-1])
 
   ###
+  # Dygraph
+  ###
+  if enableDygraph = true
+    dygraphChart = new Dygraph $('#dygraph-area-chart').get(0), '/api/v1/measurements.csv'
+
+  if enableChartJs = false
+    ###
+    # Chart.js
+    ###
+    __labels = [1..1000]
+    __dataset1 = []
+  
+    for i in __labels
+      __dataset1.push 45 + 10 * Math.random()
+    
+      # __labels = _(__labels).union __labels
+      # __dataset1 = _(__dataset1).union __dataset1
+      # _(__labels).each (o) -> __labels.push o
+  
+    __data = {
+        labels: __labels,
+        datasets: [
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,1)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: __dataset1
+        ]
+    }
+  
+    chartCtx = $('#historic-chart').get(0).getContext("2d")
+    chartJs = new Chart chartCtx,
+      type: 'line'
+      data: __data
+      options:
+        skips:
+          autoSkip: true
+
+  ###
   # Morris Chart
   ###
-
-  chart = Morris.Line
-    element: 'morris-area-chart'
-    data: []
-    xkey: 'created_at'
-    ykeys: [ 'value' ]
-    labels: [ 'Value' ]
-    hideHover: 'auto'
-    lineWidth: 1
-    pointSize: 2
-    lineColor: '#0b62a4'
-    pointStrokeColors: '#0b62a4'
-    resize: true
-    smooth: false
-
-  pollData = ->
-    $.ajax
-      url: '/api/v1/measurements'
-      success: (data) ->
-        window.historicData = data
-        chart.setData window.historicData
-        window.lastValue = _(data).last()?.value
-        return
-
-  # setInterval pollData, 250
-  pollData()
+  if enableMorris = false
+    morrisChart = Morris.Line
+      element: 'morris-area-chart'
+      data: []
+      xkey: 'created_at'
+      ykeys: [ 'value' ]
+      labels: [ 'Value' ]
+      hideHover: 'auto'
+      lineWidth: 1
+      lineColor: '#0b62a4'
+      pointStrokeColors: '#0b62a4'
+      resize: true
+      smooth: false
 
   ###
   # Flot Chart
   ###
-  flotContainer = $('#flot-line-chart-moving')
-  # Determine how many data points to keep based on the placeholder's initial size;
-  # this gives us a nice high-res plot while avoiding more than one point per pixel.
-  maximum = flotContainer.outerWidth() / 2 or 300
-  #
+  if enableFlor = true
+    flotContainer = $('#realtime-chart')
+    # Determine how many data points to keep based on the placeholder's initial size;
+    # this gives us a nice high-res plot while avoiding more than one point per pixel.
+    maximum = flotContainer.outerWidth() / 2 or 300
 
   generateFlotRealtimeData = ->
     points = []
@@ -94,19 +127,29 @@ $ ->
     }]
     return series
 
-  generateMorrisRealtimeData = ->
-    
+  pollData = ->
+    $.ajax
+      url: '/api/v1/measurements'
+      contentType: 'json'
+      success: (data) ->
+        window.historicData = data
+        morrisChart.setData window.historicData if enableMorris
+        window.lastValue = _(data).last()?.value
+        return
+
+  # setInterval pollData, 250
+  pollData()    
 
   # series = [ {
   #   data: generateFlotRealtimeData()
   #   lines: fill: true
   # } ]
 
-  updatePlot = ->
+  updateFlot = ->
     window.realtimeData = window.realtimeData.slice(1)
     window.realtimeData.push(window.lastValue or 0)
     window.lastValue = 0 if window.realtimePeaks
-    # chart.setData generateMorrisRealtimeData()
+    # morrisChart.setData generateMorrisRealtimeData()
     # return
     window.plot = $.plot(flotContainer, generateFlotRealtimeData(),
       grid:
@@ -145,7 +188,7 @@ $ ->
         show: true
     )
 
-  setInterval updatePlot, window.realtimeInterval
+  setInterval updateFlot, window.realtimeInterval
 
 
   ###
@@ -166,5 +209,5 @@ $ ->
   channel.bind 'new', (point) ->
     window.lastValue = point.value
     window.historicData.push point
-    chart.setData window.historicData
+    morrisChart.setData window.historicData
     return
