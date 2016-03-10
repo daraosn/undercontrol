@@ -90,14 +90,12 @@ ActiveRecord::Schema.define(version: 20160310131412) do
   end
 
   create_table "uc_signals", force: :cascade do |t|
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.string   "unit"
     t.integer  "uc_sensor_id"
-    t.integer  "uc_condition_id"
   end
 
-  add_index "uc_signals", ["uc_condition_id"], name: "index_uc_signals_on_uc_condition_id"
   add_index "uc_signals", ["uc_sensor_id"], name: "index_uc_signals_on_uc_sensor_id"
 
   create_table "uc_signals_monitors", force: :cascade do |t|

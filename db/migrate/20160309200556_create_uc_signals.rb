@@ -8,8 +8,6 @@ class CreateUcSignals < ActiveRecord::Migration
       t.integer :uc_sensor_id
       t.index :uc_sensor_id
 
-      t.integer :uc_condition_id
-      t.index :uc_condition_id
     end
   end
 end

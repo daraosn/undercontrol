@@ -3,5 +3,5 @@ class UcSensor < ActiveRecord::Base
   belongs_to :user
 
   validates :name, :kind, presence: true
-  validates_associated :users
+  validates_associated :user
 end
