@@ -4,4 +4,7 @@ class UcSignal < ActiveRecord::Base
 
   has_many :uc_signals_monitors
   has_many :uc_monitors, through: :uc_signals_monitors
+
+  has_many :uc_conditions_signals
+  has_many :uc_conditions, through: :uc_conditions_signals
 end

@@ -11,106 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160309210907) do
-
-  create_table "payola_affiliates", force: :cascade do |t|
-    t.string   "code"
-    t.string   "email"
-    t.integer  "percent"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "payola_coupons", force: :cascade do |t|
-    t.string   "code"
-    t.integer  "percent_off"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "active",      default: true
-  end
-
-  create_table "payola_sales", force: :cascade do |t|
-    t.string   "email",                limit: 191
-    t.string   "guid",                 limit: 191
-    t.integer  "product_id"
-    t.string   "product_type",         limit: 100
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "state"
-    t.string   "stripe_id"
-    t.string   "stripe_token"
-    t.string   "card_last4"
-    t.date     "card_expiration"
-    t.string   "card_type"
-    t.text     "error"
-    t.integer  "amount"
-    t.integer  "fee_amount"
-    t.integer  "coupon_id"
-    t.boolean  "opt_in"
-    t.integer  "download_count"
-    t.integer  "affiliate_id"
-    t.text     "customer_address"
-    t.text     "business_address"
-    t.string   "stripe_customer_id",   limit: 191
-    t.string   "currency"
-    t.text     "signed_custom_fields"
-    t.integer  "owner_id"
-    t.string   "owner_type",           limit: 100
-  end
-
-  add_index "payola_sales", ["coupon_id"], name: "index_payola_sales_on_coupon_id"
-  add_index "payola_sales", ["email"], name: "index_payola_sales_on_email"
-  add_index "payola_sales", ["guid"], name: "index_payola_sales_on_guid"
-  add_index "payola_sales", ["owner_id", "owner_type"], name: "index_payola_sales_on_owner_id_and_owner_type"
-  add_index "payola_sales", ["product_id", "product_type"], name: "index_payola_sales_on_product"
-  add_index "payola_sales", ["stripe_customer_id"], name: "index_payola_sales_on_stripe_customer_id"
-
-  create_table "payola_stripe_webhooks", force: :cascade do |t|
-    t.string   "stripe_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "payola_subscriptions", force: :cascade do |t|
-    t.string   "plan_type"
-    t.integer  "plan_id"
-    t.datetime "start"
-    t.string   "status"
-    t.string   "owner_type"
-    t.integer  "owner_id"
-    t.string   "stripe_customer_id"
-    t.boolean  "cancel_at_period_end"
-    t.datetime "current_period_start"
-    t.datetime "current_period_end"
-    t.datetime "ended_at"
-    t.datetime "trial_start"
-    t.datetime "trial_end"
-    t.datetime "canceled_at"
-    t.integer  "quantity"
-    t.string   "stripe_id"
-    t.string   "stripe_token"
-    t.string   "card_last4"
-    t.date     "card_expiration"
-    t.string   "card_type"
-    t.text     "error"
-    t.string   "state"
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "currency"
-    t.integer  "amount"
-    t.string   "guid",                 limit: 191
-    t.string   "stripe_status"
-    t.integer  "affiliate_id"
-    t.string   "coupon"
-    t.text     "signed_custom_fields"
-    t.text     "customer_address"
-    t.text     "business_address"
-    t.integer  "setup_fee"
-    t.integer  "tax_percent"
-  end
-
-  add_index "payola_subscriptions", ["guid"], name: "index_payola_subscriptions_on_guid"
+ActiveRecord::Schema.define(version: 20160310131412) do
 
   create_table "plans", force: :cascade do |t|
     t.string   "name"
@@ -119,6 +20,39 @@ ActiveRecord::Schema.define(version: 20160309210907) do
     t.integer  "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "uc_actions", force: :cascade do |t|
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "name"
+    t.string   "kind"
+    t.string   "value"
+    t.integer  "uc_process_id"
+  end
+
+  create_table "uc_actuators", force: :cascade do |t|
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "description"
+    t.string   "kind"
+  end
+
+  create_table "uc_conditions", force: :cascade do |t|
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "name"
+    t.string   "logic"
+    t.integer  "uc_process_id"
+  end
+
+  create_table "uc_conditions_signals", force: :cascade do |t|
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "uc_signal_id"
+    t.integer  "uc_condition_id"
   end
 
   create_table "uc_measurements", force: :cascade do |t|
@@ -138,6 +72,14 @@ ActiveRecord::Schema.define(version: 20160309210907) do
     t.string   "kind"
   end
 
+  create_table "uc_processes", force: :cascade do |t|
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "description"
+  end
+
   create_table "uc_sensors", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -148,12 +90,14 @@ ActiveRecord::Schema.define(version: 20160309210907) do
   end
 
   create_table "uc_signals", force: :cascade do |t|
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "unit"
     t.integer  "uc_sensor_id"
+    t.integer  "uc_condition_id"
   end
 
+  add_index "uc_signals", ["uc_condition_id"], name: "index_uc_signals_on_uc_condition_id"
   add_index "uc_signals", ["uc_sensor_id"], name: "index_uc_signals_on_uc_sensor_id"
 
   create_table "uc_signals_monitors", force: :cascade do |t|

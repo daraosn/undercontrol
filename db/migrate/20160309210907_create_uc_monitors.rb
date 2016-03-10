@@ -7,6 +7,8 @@ class CreateUcMonitors < ActiveRecord::Migration
 
       t.string :name
       t.string :kind
+
+
     end
   end
 end

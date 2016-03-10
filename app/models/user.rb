@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   has_many :uc_monitors
   has_many :uc_sensors
+  has_many :uc_actuators
+  has_many :uc_processes
 
   belongs_to :plan
   validates_associated :plan
