@@ -7,4 +7,7 @@ class UcSignal < ActiveRecord::Base
 
   has_many :uc_conditions_signals
   has_many :uc_conditions, through: :uc_conditions_signals
+
+  validates :unit, :kind, presence: true
+  validates_associated :uc_signals
 end
