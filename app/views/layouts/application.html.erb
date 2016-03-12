@@ -26,60 +26,9 @@
 </head>
 
 <body>
+    <header></header>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Temperature Monitor (&deg;C)</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <i class="fa fa-clock-o fa-fw"></i>
-                        Real Time Monitor (last 10 mins)
-                    </div>
-                    <div class="panel-body">
-                        <div class="flot-chart">
-                            <div id="realtime-chart" class="flot-chart-content"></div>
-                        </div>
-                    </div>
-                </div>
-                <% if false %>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i>
-                        Historic Chart (last 2 days)
-                    </div>
-                    <div class="panel-body">
-                        <canvas id="historic-chart" style="width: 100%; height: 400px;"></canvas>
-                    </div>
-                </div>
-                <% end %>
-            </div>
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i>
-                        Historic Chart (last 2 days)
-                    </div>
-                    <div class="panel-body">
-                        <div id="dygraph-area-chart"></div>
-                    </div>
-                </div>
-                <% if false %>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i>
-                        Historic Chart (last 2 days)
-                    </div>
-                    <div class="panel-body">
-                        <div id="morris-area-chart"></div>
-                    </div>
-                </div>
-                <% end %>
-            </div>
-        </div>
+        <%= yield%>
     </div>
 </body>
 

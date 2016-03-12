@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <%= icon 'clock-o'%>
+                Real Time Monitor (last 10 mins)
+            </div>
+            <div class="panel-body">
+                <div class="flot-chart" style="height: 300px">
+                    <div class="realtime-chart flot-chart-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <%= icon 'history'%>
+                Historic Chart (last 2 days)
+            </div>
+            <div class="panel-body">
+                <div class="historic-chart dygraph-area-chart" style="height: 300px"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -13,8 +13,8 @@
  *= require 1st_load_framework
  * require landing-page
  * require pricing
- *= require sb-admin/font-awesome
- *= require sb-admin/morris-0.4.3.min
+ * require sb-admin/font-awesome
+ * require sb-admin/morris-0.4.3.min
  *= require sb-admin/timeline
  *= require sb-admin/sb-admin
  *
@@ -27,8 +27,20 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
 body {
     background-color: #f8f8f8;
+    padding-top: 0;
+}
+
+header {
+  height: 71px;
+  background: white image-url('header-mock.png') center center no-repeat;
+  background-size: 63%;
+  border-bottom: 3px #eee solid;
+  margin-bottom: 10px;
 }
 
 #wrapper {
