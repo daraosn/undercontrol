@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :things
+
   enum role: [:user, :admin, :silver, :gold, :platinum]
   after_initialize :set_default_role, :if => :new_record?
   after_initialize :set_default_plan, :if => :new_record?

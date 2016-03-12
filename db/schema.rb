@@ -131,19 +131,19 @@ ActiveRecord::Schema.define(version: 20160312115503) do
   end
 
   create_table "things", force: :cascade do |t|
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "user_id",         null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "user_id",                         null: false
     t.string   "api_key"
     t.string   "name"
     t.string   "description"
     t.decimal  "range_min"
     t.decimal  "range_max"
+    t.string   "alarm_action"
     t.decimal  "alarm_max"
     t.decimal  "alarm_min"
     t.integer  "alarm_threshold"
-    t.boolean  "alarm_triggered"
-    t.string   "alarm_action"
+    t.boolean  "alarm_triggered", default: false
   end
 
   add_index "things", ["user_id"], name: "index_things_on_user_id"
