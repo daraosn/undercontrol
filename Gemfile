@@ -7,6 +7,9 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'bootstrap_sb_admin_base_v2'
+gem 'font-awesome-sass', '~> 4.5.0'
+gem 'bootstrap_form', '~> 2.3'
+
 gem 'pusher', '~> 0.16'
 
 group :development, :test do
