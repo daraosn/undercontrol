@@ -1,5 +1,5 @@
 class CreatePlanService
-  def call
+  def self.make
     p1 = Plan.where(name: 'Platinum').first_or_initialize do |p|
       p.amount = 2900
       p.interval = 'month'
