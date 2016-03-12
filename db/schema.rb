@@ -11,13 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160231233554) do
+ActiveRecord::Schema.define(version: 20160312115503) do
 
   create_table "measurements", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "value",      precision: 3, scale: 10
+    t.decimal  "value",      precision: 12, scale: 3
+    t.integer  "thing_id"
   end
+
+  add_index "measurements", ["thing_id"], name: "index_measurements_on_thing_id"
 
   create_table "payola_affiliates", force: :cascade do |t|
     t.string   "code"
@@ -126,6 +129,24 @@ ActiveRecord::Schema.define(version: 20160231233554) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "things", force: :cascade do |t|
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "user_id",         null: false
+    t.string   "api_key"
+    t.string   "name"
+    t.string   "description"
+    t.decimal  "range_min"
+    t.decimal  "range_max"
+    t.decimal  "alarm_max"
+    t.decimal  "alarm_min"
+    t.integer  "alarm_threshold"
+    t.boolean  "alarm_triggered"
+    t.string   "alarm_action"
+  end
+
+  add_index "things", ["user_id"], name: "index_things_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
