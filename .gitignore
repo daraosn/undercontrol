@@ -82,3 +82,9 @@ pickle-email-*.html
 
 # tilde files are usually backup files from a text editor
 *~
+
+# byebug history file
+.byebug_history
+
+# erd pdf file
+erd.pdf
