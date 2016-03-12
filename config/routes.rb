@@ -15,8 +15,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get 'measurements(.:format)' => 'measurements#index'
-      post 'measurements' => 'measurements#create'
+      resources :things do
+        get 'measurements(.:format)' => 'things#get_measurements'
+        post 'measurements' => 'things#add_measurement'
+      end
     end
   end
 end

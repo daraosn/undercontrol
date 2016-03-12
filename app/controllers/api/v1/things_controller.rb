@@ -1,25 +1,29 @@
-class Api::V1::MeasurementsController < ApplicationController
+class Api::V1::ThingsController < ApplicationController
 
-  def create
-    unless params["value"].blank?
-      # Heroku restriction
-      count = Measurement.count
-      heroku_limit = 6500 # supports 10000 but to avoid mails 6500
-      if count > heroku_limit
-        Measurement.order(:id).limit(count - heroku_limit).destroy_all
+  def add_measurement
+    thing_id = params[:thing_id]
+    value = params[:value]
+
+    thing = Thing.find thing_id
+    unless thing.blank? or value.blank?
+      measurement = Measurement.new value: value
+      #TODO: check API key
+      thing.measurements << measurement
+      measurement.save!
+      if measurement.persisted?
+        Pusher.trigger("things-#{thing_id}-measurements", 'new', measurement.as_json)
       end
-      @measurement = Measurement.create value: params["value"]
-      Pusher.trigger('measurements', 'new', @measurement.as_json)
     end
-    render json: @measurement
+    render json: measurement
   end
 
-  def index
+  def get_measurements
+    thing_id = params[:thing_id]
     fields = [:created_at, :value]
-    @measurements = Measurement.all.select(fields)
+    @measurements = Thing.find(thing_id).measurements.select(fields)
     respond_to do |format|
       format.json {
-        render json: @measurements
+        render json: @measurements.as_json(only: fields)
       }
       format.csv {
         render text: create_csv(@measurements, fields)
