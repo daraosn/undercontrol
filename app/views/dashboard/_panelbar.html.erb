@@ -1,18 +1,18 @@
 <ul class="nav nav-pills">
     <li class="active">
-        <a href="#monitor" data-toggle="tab">
+        <a href="#monitor-{{ thing.id }}" data-toggle="tab">
             <%= icon 'bar-chart-o'%>
             Monitor
         </a>
     </li>
     <li>
-        <a href="#settings" data-toggle="tab">
+        <a href="#settings-{{ thing.id }}" data-toggle="tab">
             <%= icon 'wrench'%>
             Settings
         </a>
     </li>
     <li>
-        <a href="#api" data-toggle="tab">
+        <a href="#api-{{ thing.id }}" data-toggle="tab">
             <%= icon 'cogs'%>
             API
         </a>

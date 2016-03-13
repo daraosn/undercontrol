@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :things do
         get 'measurements(.:format)' => 'things#get_measurements'
         post 'measurements' => 'things#add_measurement'
+        get 'reset_api_key' => 'things#reset_api_key'
       end
     end
   end

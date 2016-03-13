@@ -1,13 +1,13 @@
-<%= bootstrap_form_for thing, url: '#' do |f| %>
+<%= bootstrap_form_for Thing.new, url: '#', html: {class: 'settings'} do |f| %>
 <div class="row">
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">General</div>
                 <div class="panel-body">
-                    <%= f.text_field :name %>
-                    <%= f.text_field :description %>
-                    <%= f.number_field :range_min %>
-                    <%= f.number_field :range_max %>
+                    <%= f.text_field :name, value: "{{ thing.name }}" %>
+                    <%= f.text_field :description, value: "{{ thing.description }}" %>
+                    <%= f.number_field :range_min, value: "{{ thing.range_min }}" %>
+                    <%= f.number_field :range_max, value: "{{ thing.range_max }}" %>
                 </div>
             </div>
         </div>
@@ -15,19 +15,23 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Alarms</div>
                 <div class="panel-body">
-                    <%= f.text_field :alarm_action %>
-                    <%= f.number_field :alarm_min %>
-                    <%= f.number_field :alarm_max %>
-                    <%= f.number_field :alarm_threshold %>
+                    <%= f.text_field :alarm_action, value: "{{ thing.alarm_action }}" %>
+                    <%= f.number_field :alarm_min, value: "{{ thing.alarm_min }}" %>
+                    <%= f.number_field :alarm_max, value: "{{ thing.alarm_max }}" %>
+                    <%= f.number_field :alarm_threshold, value: "{{ thing.alarm_threshold }}" %>
                 </div>
             </div>
         </div>
         <div class="clearfix"></div>
 </div>
 <div class="panel-footer">
-    <button class="btn btn-success">
-        <%= icon('download')%>
+    <button class="settings-save btn btn-success">
+        <%= icon 'download' %>
         Save
     </button>
+    <span class="settings-save-success hidden">
+        <%= icon 'check' %>
+        Saved!
+    </span>
 </div>
 <% end %>

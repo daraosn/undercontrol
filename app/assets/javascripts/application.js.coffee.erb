@@ -25,14 +25,24 @@
 #= require sb-admin/jquery.flot.tooltip.min
 # require sb-admin/sb-admin
 #
+#= require clipboard.min
+#
 #= require dygraph-combined
-#
-#
-#= require dashboard
-# require_tree .
+#= require angular
+#= require angular-route
+#= require angular-resource
+#= require_self
+#= require_tree ./angular/filters
+#= require_tree ./angular/directives
+#= require_tree ./angular/services
+#= require_tree ./angular/controllers
 
 class Undercontrol
   constructor: ->
     @development = <%= Rails.env.development? %>
+    @loadAngular()
+
+  loadAngular: ->
+    @angular = angular.module 'App', ['ngRoute', 'ngResource']
 
 window.undercontrol = new Undercontrol

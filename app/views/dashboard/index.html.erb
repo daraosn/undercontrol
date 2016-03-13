@@ -1,26 +1,28 @@
-<%= render partial: 'navbar' %>
-<% @things.each do |thing| %>
-<div class="thing" data-id="<%= thing.id %>">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3><%= thing.name%></h3>
-            <i style="color: #999"><%= thing.description%></i>
-        </div>
-        <div class="panel-body" style="min-height: 500px">
-            <%= render partial: 'panelbar' %>
-            <br>
-            <div class="tab-content">
-                <div class="tab-pane fade in active" id="monitor">
-                    <%= render partial: 'monitor' %>
+<div ng-controller="DashboardController">
+    <%= render partial: 'navbar' %>
+    <div ng-repeat="(key, thing) in things" ng-controller="ThingController">
+        <div id="thing-{{ thing.id }}" class="thing">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>{{ thing.name }}</h3>
+                    <i style="color: #999">{{ thing.description }}</i>
                 </div>
-                <div class="tab-pane fade" id="settings">
-                    <%= render partial: 'settings', locals: { thing: thing } %>
-                </div>
-                <div class="tab-pane fade" id="api">
-                    <%= render partial: 'api', locals: { thing: thing } %>
+                <div class="panel-body" style="min-height: 500px">
+                    <%= render partial: 'panelbar' %>
+                    <br>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="monitor-{{ thing.id }}">
+                            <%= render partial: 'monitor' %>
+                        </div>
+                        <div class="tab-pane fade" id="settings-{{ thing.id }}">
+                            <%= render partial: 'settings' %>
+                        </div>
+                        <div class="tab-pane fade" id="api-{{ thing.id }}">
+                            <%= render partial: 'api' %>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<% end %>
