@@ -4,7 +4,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">General</div>
 			<div class="panel-body">
-				<%= f.text_field :api_key, icon: "user" %>
+				<%= f.text_field :api_key, icon: "lock" %>
 				<button class="btn btn-success">
 					<%= icon('key')%>
 					New API Key
@@ -23,9 +23,6 @@
 		</div>
 	</div>
 	<div class="col-lg-6">
-
-
-
 
 		<ul class="nav nav-tabs">
 			<li class="active">
@@ -47,7 +44,8 @@
 				</a>
 			</li>
 		</ul>
-		<div class="panel panel-default" style="padding:15px; border-top-style:hidden; border-top-left-radius:0px; border-top-right-radius:0px">
+
+		<div class="panel panel-default tab-content" style="padding:15px; border-top-style:hidden; border-top-left-radius:0px; border-top-right-radius:0px">
 			<div class="tab-pane fade in active" id="curl">
 				<br>
 				cURL is a tool to transfer data from or to a server, using one of the supported protocols. This example provides a HTTP request for easily posting a new measurement to your thing via  terminal.
