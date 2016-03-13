@@ -1,3 +1,77 @@
+<%= bootstrap_form_for thing, url: '#' do |f| %>
 <div class="row">
-    API KEY
+	<div class="col-lg-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">General</div>
+			<div class="panel-body">
+				<%= f.text_field :api_key, icon: "user" %>
+				<button class="btn btn-success">
+					<%= icon('key')%>
+					New API Key
+				</button>
+			</div>
+			<div style="padding:15px">
+				<h5>POST Request</h5>
+				<p class="help-block">Use a POST request to add new measurements.</p>
+				<div class="well well-sm">
+					https://api.undercontrol.io/update.json <br>
+					api_key=<span style="color:green"><%=thing.api_key%></span>	<br>
+					value=<span style="color:green">30</span> <br>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+
+
+
+
+		<ul class="nav nav-tabs">
+			<li class="active">
+				<a href="#curl" data-toggle="tab">
+					<%= icon 'terminal'%>
+					cURL
+				</a>
+			</li>
+			<li>
+				<a href="#arduino" data-toggle="tab">
+					<%= icon 'code'%>
+					ESP8266 Arduino
+				</a>
+			</li>
+			<li>
+				<a href="#nodemcu" data-toggle="tab">
+					<%= icon 'code'%>
+					NodeMCU
+				</a>
+			</li>
+		</ul>
+		<div class="panel panel-default" style="padding:15px; border-top-style:hidden; border-top-left-radius:0px; border-top-right-radius:0px">
+			<div class="tab-pane fade in active" id="curl">
+				<br>
+				cURL is a tool to transfer data from or to a server, using one of the supported protocols. This example provides a HTTP request for easily posting a new measurement to your thing via  terminal.
+				<br>
+				<br>
+				<div class="well well-sm">
+					curl -s -v 'http://api.undercontrol.io/things/<span style="color:green"><%=thing.id%></span>/measurements' -XPOST -d 'api_key=<span style="color:green"><%=thing.api_key%></span>&value=<span style="color:green">35</span>'
+				</div>
+			</div>
+			<div class="tab-pane fade" id="arduino">
+			test
+				<div class="well well-sm">
+					<xmp>
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+					</xmp>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="nodemcu">
+				nodemcu
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
 </div>
+
+<% end %>
