@@ -9,6 +9,8 @@ gem 'jbuilder', '~> 2.0'
 gem 'bootstrap_sb_admin_base_v2'
 gem 'font-awesome-sass', '~> 4.5.0'
 gem 'bootstrap_form', '~> 2.3'
+gem 'angularjs-rails', '~> 1.5.0'
+gem 'ngannotate-rails', '~> 1.2.1'
 
 gem 'pusher', '~> 0.16'
 

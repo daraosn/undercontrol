@@ -38,6 +38,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
+    angularjs-rails (1.5.0)
     arel (6.0.3)
     autoprefixer-rails (6.3.1)
       execjs
@@ -140,6 +141,9 @@ GEM
     multi_json (1.11.2)
     multipart-post (2.0.0)
     netrc (0.11.0)
+    ngannotate-rails (1.2.1)
+      execjs
+      rails (>= 3.1)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     orm_adapter (0.5.0)
@@ -304,6 +308,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angularjs-rails (~> 1.5.0)
   better_errors
   bootstrap-sass
   bootstrap_form (~> 2.3)
@@ -321,6 +326,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   launchy
+  ngannotate-rails (~> 1.2.1)
   payola-payments
   pg
   pusher (~> 0.16)
