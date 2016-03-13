@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  # get "content/silver"
-  # get "content/gold"
-  # get "content/platinum"
+   #get "layouts#original"
+   #get "content/gold"
+   #get "content/platinum"
   # mount Payola::Engine => '/payola', as: :payola
-  # root to: 'visitors#index'
+   #root to: 'visitors#index'
   # get 'products/:id', to: 'products#show', :as => :products
   # devise_for :users, :controllers => { :registrations => 'registrations' }
   # devise_scope :user do
@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   # resources :users
 
   root 'dashboard#index'
+
+  get 'login' => 'visitors#login'
 
   namespace :api do
     namespace :v1 do
