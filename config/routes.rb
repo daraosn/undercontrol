@@ -13,6 +13,11 @@ Rails.application.routes.draw do
 
   root 'dashboard#index'
 
+  #get 'login' => 'users#login'
+
+
+  resources :users
+
   namespace :api do
     namespace :v1 do
       resources :things do
@@ -22,3 +27,4 @@ Rails.application.routes.draw do
     end
   end
 end
+
