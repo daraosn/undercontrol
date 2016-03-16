@@ -17,21 +17,30 @@ class ThingController
     @lastValues = {}
 
     @configureScope()
-    @loadThing $scope.thing, $element
+    @loadThingUI $scope.thing, $element
 
   configureScope: ->
     @$scope.realtimeLastMinutes = @realtimeLastMinutes
     @$scope.selectApiKey = @selectApiKey
     @$scope.resetApiKey = @resetApiKey
+    @$scope.saveThing = @saveThing
+
+  saveThing: (e) =>
+    e.preventDefault()
+    thing = @$scope.thing
+    thing.$update =>
+      @$saveSuccess.stop(true,true).show().fadeOut(3000)
 
   selectApiKey: (e) =>
     e.target.select()
 
   resetApiKey: (e) =>
     e.preventDefault()
-    @Thing.resetApiKey { thing_id: @$scope.thing.id }, (thing) => @$scope.thing.api_key = thing.api_key
+    thing = @$scope.thing
+    @Thing.resetApiKey { id: thing.id }, (newThing) => thing.api_key = newThing.api_key
 
-  loadThing: (thing, $element)  =>
+  loadThingUI: (thing, $element)  =>
+    @$saveSuccess = @$element.find('.settings-save-success').hide()
     @loadUI $element, thing
     @loadHistoricChart thing.id, $element.find('.historic-chart')
     @loadRealtimeChart thing.id, $element.find('.realtime-chart')

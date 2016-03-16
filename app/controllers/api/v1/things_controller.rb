@@ -1,5 +1,7 @@
 class Api::V1::ThingsController < ApplicationController
 
+  
+
   def index
     # TODO: IMPORTANT: select current_user's things only!
     render json: Thing.all#.select(:id, :name, :description, :api_key) # TODO: filter later for security reasons
@@ -11,8 +13,11 @@ class Api::V1::ThingsController < ApplicationController
 
   def update
     ## TODO: specify safe params to avoid mass injection
-    ## TODO: Thing.update params[:thing]
-    render json: {}
+    thing_params = params[:thing]
+    if thing = Thing.find(thing_params[:id])
+      thing.update thing_params.permit(:name, :description, :range_min, :range_max, :alarm_action, :alarm_min, :alarm_max, :alarm_threshold)
+    end
+    render json: thing
   end
 
   def reset_api_key

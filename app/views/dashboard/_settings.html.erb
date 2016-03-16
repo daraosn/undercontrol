@@ -4,10 +4,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading">General</div>
                 <div class="panel-body">
-                    <%= f.text_field :name, value: "{{ thing.name }}" %>
-                    <%= f.text_field :description, value: "{{ thing.description }}" %>
-                    <%= f.number_field :range_min, value: "{{ thing.range_min }}" %>
-                    <%= f.number_field :range_max, value: "{{ thing.range_max }}" %>
+                    <%= f.text_field :name, 'ng-model': "thing.name" %>
+                    <%= f.text_field :description, 'ng-model': "thing.description" %>
+                    <%= f.number_field :range_min, step: 0.001, 'ng-model': "thing.range_min" %>
+                    <%= f.number_field :range_max, step: 0.001, 'ng-model': "thing.range_max" %>
                 </div>
             </div>
         </div>
@@ -15,21 +15,21 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Alarms</div>
                 <div class="panel-body">
-                    <%= f.text_field :alarm_action, value: "{{ thing.alarm_action }}" %>
-                    <%= f.number_field :alarm_min, value: "{{ thing.alarm_min }}" %>
-                    <%= f.number_field :alarm_max, value: "{{ thing.alarm_max }}" %>
-                    <%= f.number_field :alarm_threshold, value: "{{ thing.alarm_threshold }}" %>
+                    <%= f.text_field :alarm_action, 'ng-model': "thing.alarm_action" %>
+                    <%= f.number_field :alarm_min, step: 0.001, 'ng-model': "thing.alarm_min" %>
+                    <%= f.number_field :alarm_max, step: 0.001, 'ng-model': "thing.alarm_max" %>
+                    <%= f.number_field :alarm_threshold, 'ng-model': "thing.alarm_threshold" %>
                 </div>
             </div>
         </div>
         <div class="clearfix"></div>
 </div>
 <div class="panel-footer">
-    <button class="settings-save btn btn-success">
+    <button class="settings-save btn btn-success" ng-click="saveThing($event)">
         <%= icon 'download' %>
         Save
     </button>
-    <span class="settings-save-success hidden">
+    <span class="settings-save-success">
         <%= icon 'check' %>
         Saved!
     </span>
