@@ -25,8 +25,7 @@ class ThingController
     @$scope.resetApiKey = @resetApiKey
     @$scope.saveThing = @saveThing
 
-  saveThing: (e) =>
-    e.preventDefault()
+  saveThing: =>
     thing = @$scope.thing
     thing.$update =>
       @$saveSuccess.stop(true,true).show().fadeOut(3000)
@@ -34,8 +33,7 @@ class ThingController
   selectApiKey: (e) =>
     e.target.select()
 
-  resetApiKey: (e) =>
-    e.preventDefault()
+  resetApiKey: =>
     @$scope.thing.$resetApiKey()# { id: thing.id, api_key: thing.api_key }, (newThing) => thing.api_key = newThing.api_key
 
   loadThingUI: (thing, $element)  =>

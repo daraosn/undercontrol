@@ -25,6 +25,10 @@ class Thing
         method: "GET"
         isArray: true
         transformResponse: unpackThings
+      create:
+        url: '/api/v1/things'
+        method: "POST"
+        transformResponse: unpackThing
       update:
         url: '/api/v1/things/:id'
         method: "PUT"

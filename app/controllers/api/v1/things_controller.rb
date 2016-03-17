@@ -28,7 +28,10 @@ class Api::V1::ThingsController < ApplicationController
   end
 
   def create
-    # TODO: create new thing
+    thing = Thing.new(name: 'New Thing')
+    current_user.things << thing
+    thing.save!
+    render json: thing
   end
 
   def update
