@@ -1,0 +1,13 @@
+<% if @user.errors.any? %>
+    <div class="alert alert-danger">
+        <div>
+            Unable to register, please correct:
+        </div>
+        <hr>
+        <ul>
+        <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+        </ul>
+    </div>
+<% end %>

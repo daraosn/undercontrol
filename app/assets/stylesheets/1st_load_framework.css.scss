@@ -68,7 +68,15 @@ section {
 .authform fieldset {
   @extend .well;
 }
-#error_explanation:not(:empty) {
+.alert-notice:not(:empty) {
+  @extend .alert;
+  @extend .alert-info;
+}
+.alert-alert:not(:empty) {
+  @extend .alert;
+  @extend .alert-warning;
+}
+.alert-error:not(:empty) {
   @extend .alert;
   @extend .alert-danger;
 }
