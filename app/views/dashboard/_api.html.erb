@@ -23,9 +23,9 @@
                 <h5>POST Request</h5>
                 <p class="help-block">Use a POST request to add new measurements.</p>
                 <div class="well well-sm">
-                    https://api.undercontrol.io/update.json <br>
-                    api_key=<span style="color:green">{{ thing.api_key }}</span>    <br>
-                    value=<span style="color:green">30</span> <br>
+                    <%= api_v1_measurements_url %><br>
+                    ?api_key=<span style="color:green">{{ thing.api_key }}</span><br>
+                    &amp;value=<span style="color:green">30</span><br>
                 </div>
 
             </div>
