@@ -7,13 +7,14 @@ Rails.application.routes.draw do
     scope :register do
       get "/", to: "auth/registrations#new", as: :new_user_registration
       post "/", to: "auth/registrations#create", as: :user_registration
-      get "confirm", to: "auth/confirmations#new", as: :user_confirmation
-      post "confirm/user", to: "auth/confirmations#create"
-      get "confirm/:user_id", to: "auth/confirmations#show", as: :confirmation
-      get "password(/user(.:format))", to: "auth/passwords#new", as: :new_user_password
-      get "password/:reset_password_token", to: "auth/passwords#edit", as: :edit_user_password
-      post "password/:user_id", to: "auth/passwords#create", as: :password
-      get "unlock", to: "auth/unlocks#new", as: :new_user_unlock
+      get "confirm", to: "devise/confirmations#new", as: :user_confirmation
+      post "confirm/user", to: "devise/confirmations#create"
+      get "confirm/:user_id", to: "devise/confirmations#show", as: :confirmation
+      get "password(/user)", to: "devise/passwords#new", as: :new_user_password
+      get "password/:reset_password_token", to: "devise/passwords#edit", as: :edit_user_password
+      put "password/user", to: "devise/passwords#update"
+      post "password/:user_id", to: "devise/passwords#create", as: :password
+      get "unlock", to: "devise/unlocks#new", as: :new_user_unlock
     end
   end
 
