@@ -1,5 +1,27 @@
 class Api::V1::ThingsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: :add_measurement
+
+  # @public api
+  def add_measurement
+    value = params[:value]
+    api_key = params[:api_key]
+
+    thing = Thing.find_by_api_key api_key
+    unless thing.blank? or value.blank?
+      measurement = Measurement.new value: value
+      thing.measurements << measurement
+      measurement.save!
+      if measurement.persisted?
+        Pusher.trigger("things-#{thing.id}-measurements", 'new', measurement.as_json)
+        return render json: { success: true, errors: [] }
+      end
+    else
+      return render json: { success: false, errors: ['Invalid parameters'] }, status: :not_found
+    end
+    render json: { success: false, errors: ['Unable to add measurement'] }
+  end
+
+  ######
 
   def index
     render json: current_user.things
@@ -25,25 +47,6 @@ class Api::V1::ThingsController < ApplicationController
     else
       render json: {}, status: :not_found
     end
-  end
-
-  def add_measurement
-    value = params[:value]
-    api_key = params[:api_key]
-
-    thing = current_user.things.find_by_api_key api_key
-    unless thing.blank? or value.blank?
-      measurement = Measurement.new value: value
-      thing.measurements << measurement
-      measurement.save!
-      if measurement.persisted?
-        Pusher.trigger("things-#{thing.id}-measurements", 'new', measurement.as_json)
-        return render json: { success: true, errors: [] }
-      end
-    else
-      return render json: { success: false, errors: ['Invalid parameters'] }, status: :not_found
-    end
-    render json: { success: false, errors: ['Unable to add measurement'] }
   end
 
   def get_measurements
