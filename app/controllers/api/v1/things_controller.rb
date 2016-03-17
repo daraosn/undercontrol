@@ -1,10 +1,8 @@
 class Api::V1::ThingsController < ApplicationController
-
-  
+  before_filter :authenticate_user!
 
   def index
-    # TODO: IMPORTANT: select current_user's things only!
-    render json: Thing.all#.select(:id, :name, :description, :api_key) # TODO: filter later for security reasons
+    render json: current_user.things
   end
 
   def create
@@ -12,17 +10,15 @@ class Api::V1::ThingsController < ApplicationController
   end
 
   def update
-    ## TODO: specify safe params to avoid mass injection
     thing_params = params[:thing]
-    if thing = Thing.find(thing_params[:id])
+    if thing = current_user.things.find(thing_params[:id])
       thing.update thing_params.permit(:name, :description, :range_min, :range_max, :alarm_action, :alarm_min, :alarm_max, :alarm_threshold)
     end
     render json: thing
   end
 
   def reset_api_key
-    # TODO: IMPORTANT: check current user has privileges
-    thing = Thing.select(:api_key).find(params[:thing_id])
+    thing = current_user.things.find_by_api_key(params[:api_key])
     unless thing.blank?
       thing.reset_api_key!
       render json: thing
@@ -32,26 +28,28 @@ class Api::V1::ThingsController < ApplicationController
   end
 
   def add_measurement
-    thing_id = params[:thing_id]
     value = params[:value]
+    api_key = params[:api_key]
 
-    thing = Thing.find thing_id
+    thing = current_user.things.find_by_api_key api_key
     unless thing.blank? or value.blank?
       measurement = Measurement.new value: value
-      #TODO: check API key
       thing.measurements << measurement
       measurement.save!
       if measurement.persisted?
-        Pusher.trigger("things-#{thing_id}-measurements", 'new', measurement.as_json)
+        Pusher.trigger("things-#{thing.id}-measurements", 'new', measurement.as_json)
+        return render json: { success: true, errors: [] }
       end
+    else
+      return render json: { success: false, errors: ['Invalid parameters'] }, status: :not_found
     end
-    render json: measurement
+    render json: { success: false, errors: ['Unable to add measurement'] }
   end
 
   def get_measurements
     thing_id = params[:thing_id]
     fields = [:created_at, :value]
-    @measurements = Thing.find(thing_id).measurements.select(fields)
+    @measurements = current_user.things.find(thing_id).measurements.select(fields)
     respond_to do |format|
       format.json {
         render json: @measurements.as_json(only: fields)

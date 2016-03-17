@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   validates :username, presence: true, uniqueness: true
   validates :password, confirmation: true
-  validates_length_of :password, in: 6..255, on: [:create, :update]
+  validates_length_of :password, in: 8..255, on: [:create, :update]
 
   # Include default devise modules. Others available are:
   # :omniauthable

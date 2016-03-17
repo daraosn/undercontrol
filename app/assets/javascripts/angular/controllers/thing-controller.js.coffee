@@ -36,8 +36,7 @@ class ThingController
 
   resetApiKey: (e) =>
     e.preventDefault()
-    thing = @$scope.thing
-    @Thing.resetApiKey { id: thing.id }, (newThing) => thing.api_key = newThing.api_key
+    @$scope.thing.$resetApiKey()# { id: thing.id, api_key: thing.api_key }, (newThing) => thing.api_key = newThing.api_key
 
   loadThingUI: (thing, $element)  =>
     @$saveSuccess = @$element.find('.settings-save-success').hide()

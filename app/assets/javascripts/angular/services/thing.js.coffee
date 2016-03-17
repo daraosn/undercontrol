@@ -19,7 +19,7 @@ class Thing
     packThing = (data) =>
       return angular.toJson(thing: data)
 
-    return $resource '/', {id: '@id'},
+    return $resource '/', {id: '@id', api_key: '@api_key'},
       all:
         url: '/api/v1/things'
         method: "GET"
@@ -31,7 +31,8 @@ class Thing
         transformRequest: packThing
         transformResponse: unpackThing
       resetApiKey:
-        url: '/api/v1/things/:id/reset_api_key'
+        url: '/api/v1/things/reset_api_key/:api_key'
         method: "GET"
+        transformResponse: unpackThing
 
 angular.module('App').factory 'Thing', Thing

@@ -20,10 +20,13 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      scope :things do
+        get 'measurements(/:api_key/:value)' => 'things#add_measurement'
+        post 'measurements' => 'things#add_measurement'
+        get 'reset_api_key/:api_key' => 'things#reset_api_key'
+      end
       resources :things do
         get 'measurements(.:format)' => 'things#get_measurements'
-        post 'measurements' => 'things#add_measurement'
-        get 'reset_api_key' => 'things#reset_api_key'
       end
     end
   end
