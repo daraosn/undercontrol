@@ -14,6 +14,8 @@ gem 'ngannotate-rails', '~> 1.2.1'
 
 gem 'pusher', '~> 0.16'
 
+gem 'httparty', '~> 0.13.7'
+
 group :development, :test do
   gem 'byebug'
 end

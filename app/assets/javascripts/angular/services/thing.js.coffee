@@ -1,7 +1,6 @@
 class Thing
   constructor: ($resource) ->
     'ngInject'
-
     ###
     # Handy methods to make service work with Rails
     ###
@@ -14,9 +13,11 @@ class Thing
       data = angular.fromJson(data) if _.isString data
       ['range_min', 'range_max', 'alarm_min', 'alarm_max'].forEach (field) ->
         data[field] = Number data[field]
+      data.$alarm_action = angular.fromJson(data.alarm_action)
       return data
 
     packThing = (data) =>
+      data.alarm_action = angular.toJson(data.$alarm_action)
       return angular.toJson(thing: data)
 
     return $resource '/', {id: '@id', api_key: '@api_key'},

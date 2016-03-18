@@ -6,6 +6,11 @@ class DashboardController
     
     window.things = $scope.things = Thing.all()
     $scope.addThing = @addThing
+    $scope.alarmActions = {
+      <% Action.types.each do |key, name| %>
+      '<%=key%>'  : '<%=name%>'
+      <% end %>
+    }
 
   addThing: =>
     @Thing.create (thing) => @$scope.things.push thing

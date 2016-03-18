@@ -48,7 +48,7 @@ class Thing < ActiveRecord::Base
     return if self.alarm_triggered
     # else we change the state and execute its action
     self.update alarm_triggered: true
-    Action.do self.alarm_action
+    Action.do(self)
   end
 
   def untrigger_alarm

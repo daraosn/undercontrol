@@ -9,7 +9,7 @@ class CreateThings < ActiveRecord::Migration
       t.string :description
       t.decimal :range_min, precision: 12, scale: 3, default: 0
       t.decimal :range_max, precision: 12, scale: 3, default: 100
-      t.string :alarm_action
+      t.string :alarm_action, limit: 8 * 1024 # 8kb maximum JSON
       t.decimal :alarm_max, precision: 12, scale: 3, default: 0
       t.decimal :alarm_min, precision: 12, scale: 3, default: 0
       t.integer :alarm_threshold, default: 0
