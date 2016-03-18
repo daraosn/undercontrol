@@ -18,6 +18,7 @@ gem 'httparty', '~> 0.13.7'
 
 group :development, :test do
   gem 'byebug'
+  gem 'dotenv-rails'
 end
 group :development do
   gem 'web-console', '~> 2.0'

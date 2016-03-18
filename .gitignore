@@ -88,3 +88,6 @@ pickle-email-*.html
 
 # erd pdf file
 erd.pdf
+
+# .env
+.env
