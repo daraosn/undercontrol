@@ -9,7 +9,7 @@ class CreateThingsService
         alarm_min: rand(20..25),
         alarm_max: rand(35..40),
         alarm_threshold: rand(1..4),
-        alarm_action: Action.new_email("test.ucio@yopmail.com")
+        alarm_action: Action.new_send_email("test.ucio@yopmail.com")
       )
       user.things << thing
       thing.save!

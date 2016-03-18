@@ -7,12 +7,12 @@ class CreateThings < ActiveRecord::Migration
       t.string :api_key
       t.string :name
       t.string :description
-      t.decimal :range_min
-      t.decimal :range_max
+      t.decimal :range_min, precision: 12, scale: 3, default: 0
+      t.decimal :range_max, precision: 12, scale: 3, default: 100
       t.string :alarm_action
-      t.decimal :alarm_max
-      t.decimal :alarm_min
-      t.integer :alarm_threshold
+      t.decimal :alarm_max, precision: 12, scale: 3, default: 0
+      t.decimal :alarm_min, precision: 12, scale: 3, default: 0
+      t.integer :alarm_threshold, default: 0
       t.boolean :alarm_triggered, default: false
 
       t.index :user_id

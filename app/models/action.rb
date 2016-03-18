@@ -1,7 +1,6 @@
 class Action
   def self.do json
     action = JSON.parse json, symbolize_names: true
-    pp action
     type = action[:type].to_sym
     case type
     when :email
@@ -19,7 +18,7 @@ class Action
     end
   end
 
-  def self.new_email email
+  def self.new_send_email email
     { type: :email, email: email }.to_json
   end
 
