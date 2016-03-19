@@ -1,6 +1,4 @@
-class AlarmMailer < ActionMailer::Base
-  default :from => "alarms@undercontrol.io"
-
+class AlarmMailer < ApplicationMailer
   def alarm_triggered(thing)
     @thing = thing
     mail(to: thing.user.email, subject: "Alarm triggered: #{thing.name}")

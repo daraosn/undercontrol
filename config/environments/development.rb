@@ -31,11 +31,11 @@ Rails.application.configure do
     config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
   else
     config.action_mailer.smtp_settings = {
-      address: "smtp.gmail.com",
+      address: Rails.application.secrets.email_provider_host,
       port: 587,
       domain: Rails.application.secrets.domain_name,
       authentication: "plain",
-      enable_starttls_auto: true,
+      #enable_starttls_auto: true,
       user_name: Rails.application.secrets.email_provider_username,
       password: Rails.application.secrets.email_provider_password
     }
