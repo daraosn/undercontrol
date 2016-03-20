@@ -60,4 +60,6 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  config.action_mailer.asset_host = "http://" + Rails.application.secrets.domain_name
 end
