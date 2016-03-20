@@ -1,7 +1,10 @@
 class Api::V1::ThingsController < ApplicationController
   before_filter :authenticate_user!, except: :add_measurement
 
-  # @public api
+  ###
+  # external api
+  ###
+
   def add_measurement
     value = params[:value]
     api_key = params[:api_key]
@@ -21,14 +24,16 @@ class Api::V1::ThingsController < ApplicationController
     render json: { success: false, errors: ['Unable to add measurement'] }
   end
 
-  ######
+  ###
+  # internal api
+  ###
 
   def index
     render json: current_user.things
   end
 
   def create
-    thing = Thing.new(name: 'New Thing')
+    thing = Thing.new(name: 'New Thing', alarm_threshold: 0, alarm_action: Action.new_send_email(current_user.email))
     current_user.things << thing
     thing.save!
     render json: thing
