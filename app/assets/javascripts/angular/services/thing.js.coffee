@@ -39,7 +39,7 @@ class Thing
         url: '/api/v1/things/reset_api_key/:api_key'
         method: "GET"
         transformResponse: unpackThing
-      deleteThing:
+      delete:
         url: '/api/v1/things/:id'
         method: "DELETE"
 

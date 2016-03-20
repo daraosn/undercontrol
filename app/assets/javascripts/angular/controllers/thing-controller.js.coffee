@@ -8,6 +8,7 @@ class ThingController
     @thingUrl = "/api/v1/things/:thing_id"
     @thingMeasurementsUrl = "/api/v1/things/:thing_id/measurements"
 
+    @realtimeTimerId = 0
     @realtimeLastMinutes = 5 # min
     @realtimeRefreshRate = 1000 # ms
     @realtimePoints = 1000 / @realtimeRefreshRate * @realtimeLastMinutes * 60
@@ -31,14 +32,17 @@ class ThingController
     thing.$update =>
       @$saveSuccess.stop(true,true).show().fadeOut(3000)
 
-  deleteThing: =>
-    @$scope.thing.$deleteThing()
+  deleteThing: ($index) =>
+    if confirm "Are you sure you want to delete this?"
+      @$scope.thing.$delete =>
+        @$scope.things.splice($index, 1)
+        @unloadThing()
 
   selectApiKey: (e) =>
     e.target.select()
 
   resetApiKey: =>
-    @$scope.thing.$resetApiKey()# { id: thing.id, api_key: thing.api_key }, (newThing) => thing.api_key = newThing.api_key
+    @$scope.thing.$resetApiKey()
 
   loadThingUI: (thing, $element)  =>
     @$saveSuccess = @$element.find('.settings-save-success').hide()
@@ -122,7 +126,7 @@ class ThingController
           show: true
       )
 
-    setInterval updateFlot, @realtimeRefreshRate
+    @realtimeTimerId = setInterval updateFlot, @realtimeRefreshRate
     return
 
   loadPusher: (thingId) ->
@@ -141,5 +145,8 @@ class ThingController
       return
 
     return
+
+  unloadThing: ->
+    clearInterval @realtimeTimerId
 
 angular.module('App').controller 'ThingController', ThingController

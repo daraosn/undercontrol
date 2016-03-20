@@ -40,11 +40,11 @@ class Api::V1::ThingsController < ApplicationController
   end
 
   def destroy
-    @thing = Thing.find(params[:id])
+    @thing = current_user.things.find(params[:id])
     if @thing.present?
       @thing.destroy
     end
-  render json: current_user.things
+    head :ok
   end
 
   def update
