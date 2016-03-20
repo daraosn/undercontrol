@@ -24,6 +24,8 @@ Rails.application.routes.draw do
         get 'measurements(/:api_key/:value)' => 'things#add_measurement'
         post 'measurements' => 'things#add_measurement'
         get 'reset_api_key/:api_key' => 'things#reset_api_key'
+        delete 'things/:id(.:format)', :to => 'things#destroy'
+ 
       end
       resources :things do
         get 'measurements(.:format)' => 'things#get_measurements'

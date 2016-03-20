@@ -24,11 +24,15 @@ class ThingController
     @$scope.selectApiKey = @selectApiKey
     @$scope.resetApiKey = @resetApiKey
     @$scope.saveThing = @saveThing
+    @$scope.deleteThing = @deleteThing
 
   saveThing: =>
     thing = @$scope.thing
     thing.$update =>
       @$saveSuccess.stop(true,true).show().fadeOut(3000)
+
+  deleteThing: =>
+    @$scope.thing.$deleteThing()
 
   selectApiKey: (e) =>
     e.target.select()

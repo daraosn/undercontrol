@@ -39,5 +39,8 @@ class Thing
         url: '/api/v1/things/reset_api_key/:api_key'
         method: "GET"
         transformResponse: unpackThing
+      deleteThing:
+        url: '/api/v1/things/:id'
+        method: "DELETE"
 
 angular.module('App').factory 'Thing', Thing
