@@ -24,9 +24,8 @@
 
     <script src="https://js.pusher.com/3.0/pusher.min.js"></script>
 </head>
-
+<%= render partial: 'layouts/header' %>
 <body ng-app="App">
-    <header></header>
     <div class="container">
         <% flash.each do |message_type, message| %>
             <div class="alert alert-<%= message_type %>"><%= message %></div>
