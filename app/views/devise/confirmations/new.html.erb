@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Resend confirmation instructions</h3>
+                </div>
+                <div class="panel-body">
+                    <fieldset>
+                        <%= form_for resource, url: user_registration_path do |f| %>
+                            <%= render partial: 'error_messages' %>
+                            <div class="form-group">
+                                <%= f.email_field :email, class:'form-control', placeholder:'E-mail', autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+                            </div>
+                            <%= f.submit "Resend confirmation instructions", class: "btn btn-lg btn-success btn-block" %>
+                        <% end %>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
