@@ -34,6 +34,14 @@ class Api::V1::ThingsController < ApplicationController
     render json: thing
   end
 
+  def destroy
+    @thing = Thing.find(params[:id])
+    if @thing.present?
+      @thing.destroy
+    end
+  render json: current_user.things
+  end
+
   def update
     thing_params = params[:thing]
     if thing = current_user.things.find(thing_params[:id])
