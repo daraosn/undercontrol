@@ -57,7 +57,13 @@ class ThingController
 
   loadHistoricChart: (thingId, $wrapper) ->
     url = @thingMeasurementsUrl.replace(':thing_id', thingId) + '.csv'
-    @$scope.realtimeChart = new Dygraph $wrapper.get(0), url
+    dychart = new Dygraph $wrapper.get(0), url
+    @$scope.historicChart = dychart
+    width = dychart.width_
+    height = dychart.height_
+    $(window).on 'visibilitychange', (e) =>
+      dychart.resize 1,1
+      dychart.resize width,height
     return
 
   loadRealtimeChart: (thingId, $wrapper) =>
@@ -89,7 +95,7 @@ class ThingController
       @realtimeData[thingId] = @realtimeData[thingId].slice(1)
       @realtimeData[thingId].push(@lastValues[thingId] or 0)
       @lastValues[thingId] = 0 if @realtimePeaks
-      @$scope.historicChart = $.plot($wrapper, generateFlotRealtimeData(),
+      @$scope.realtimeChart = $.plot($wrapper, generateFlotRealtimeData(),
         grid:
           borderWidth: 1
           minBorderMargin: 20
