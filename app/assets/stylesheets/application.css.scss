@@ -35,6 +35,10 @@ body {
     padding-top: 0;
 }
 
+body > .container {
+    padding-top: 20px;
+}
+
 header {
   height: 71px;
   background: white image-url('header-mock.png') center center no-repeat;
@@ -120,7 +124,7 @@ header {
     left: auto;
 }
 
-.sidebar .sidebar-nav.navbar-collapse {
+.navbar-collapse {
     padding-right: 0;
     padding-left: 0;
 }
