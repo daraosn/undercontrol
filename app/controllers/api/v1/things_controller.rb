@@ -15,7 +15,7 @@ class Api::V1::ThingsController < ApplicationController
       thing.measurements << measurement
       measurement.save!
       if measurement.persisted?
-        Pusher.trigger("things-#{thing.id}-measurements", 'new', measurement.as_json)
+        Pusher.trigger("things-#{thing.id}-measurements", 'new', measurement.as_json) rescue false
         return render json: { success: true, errors: [] }
       end
     else
@@ -68,7 +68,9 @@ class Api::V1::ThingsController < ApplicationController
   def get_measurements
     thing_id = params[:thing_id]
     fields = [:created_at, :value]
-    @measurements = current_user.things.find(thing_id).measurements.select(fields)
+    interval = params[:interval] or :day
+    conditions = get_interval_condition params[:interval]
+    @measurements = current_user.things.find(thing_id).measurements.select(fields).where(conditions)
     respond_to do |format|
       format.json {
         render json: @measurements.as_json(only: fields)
@@ -94,6 +96,24 @@ class Api::V1::ThingsController < ApplicationController
       csv += line.join(separator) + "\n"
     end
     csv
+  end
+
+  def get_interval_condition interval
+    interval = interval.to_sym
+    date = Time.now
+    case interval
+    when :year
+      date -= 1.year
+    when :month
+      date -= 1.month
+    when :week
+      date -= 1.week
+    when :hour
+      date -= 1.hour
+    else # :day is default
+      date -= 1.day
+    end
+    ['created_at >= ?', date]
   end
 
 end

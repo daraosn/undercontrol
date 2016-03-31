@@ -16,7 +16,10 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <%= icon 'history'%>
-                Historic Chart (last 2 days)
+                Historic Chart (last <span>{{ historicChartInterval }}</span>)
+                <div class="pull-right">
+                    <select class="" ng-options="k as v for (k, v) in historicChartintervals" ng-model="historicChartInterval" ng-change="changeHistoricChartInterval()"></select>
+                </div>
             </div>
             <div class="panel-body">
                 <div class="historic-chart dygraph-area-chart" style="height: 300px"></div>

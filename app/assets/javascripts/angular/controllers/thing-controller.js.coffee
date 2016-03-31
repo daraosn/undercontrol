@@ -26,6 +26,18 @@ class ThingController
     @$scope.resetApiKey = @resetApiKey
     @$scope.saveThing = @saveThing
     @$scope.deleteThing = @deleteThing
+    @$scope.showApiUrlTextbox = @showApiUrlTextbox
+    @$scope.hideApiUrlTextbox = @hideApiUrlTextbox
+    @$scope.thing.randomValue = Math.round Math.random() * 100
+
+    @$scope.historicChartintervals =
+      hour: '1 hour'
+      day: '1 day'
+      week: '1 week'
+      month: '1 month'
+      year: '1 year'
+    @$scope.historicChartInterval = 'day'
+    @$scope.changeHistoricChartInterval = @changeHistoricChartInterval
 
   saveThing: =>
     thing = @$scope.thing
@@ -38,6 +50,21 @@ class ThingController
         @$scope.things.splice($index, 1)
         @unloadThing()
 
+  changeHistoricChartInterval: =>
+    @loadHistoricChart @$scope.thing.id
+
+  showApiUrlTextbox: (e) ->
+    $element = $(e.currentTarget) # TODO: check cross compatibility, or maybe use e.delegateTarget (safari? firefox? ie?)
+    $textDiv = $element.find('.api-url-text')
+    $inputDiv = $element.find('.api-url-input')
+    $textDiv.hide()
+    $inputDiv.show()
+    url = $textDiv.text().replace(/[\n\s]+/g, "")
+    $inputDiv.find('input').val(url).get(0).select()
+    return
+
+  hideApiUrlTextbox: (e) ->
+
   selectApiKey: (e) =>
     e.target.select()
 
@@ -47,16 +74,17 @@ class ThingController
   loadThingUI: (thing, $element)  =>
     @$saveSuccess = @$element.find('.settings-save-success').hide()
     @loadUI $element, thing
-    @loadHistoricChart thing.id, $element.find('.historic-chart')
-    @loadRealtimeChart thing.id, $element.find('.realtime-chart')
+    @loadHistoricChart thing.id
+    @loadRealtimeChart thing.id
     @loadPusher thing.id
     return
 
   loadUI: ($element, thing) =>
     new Clipboard($element.find('.btn.copy-api-key').get(0))
 
-  loadHistoricChart: (thingId, $wrapper) ->
-    url = @thingMeasurementsUrl.replace(':thing_id', thingId) + '.csv'
+  loadHistoricChart: (thingId) =>
+    $wrapper = @$element.find('.historic-chart')
+    url = @thingMeasurementsUrl.replace(':thing_id', thingId) + '.csv' + '?interval=' + @$scope.historicChartInterval
     dychart = new Dygraph $wrapper.get(0), url
     @$scope.historicChart = dychart
     width = dychart.width_
@@ -66,7 +94,8 @@ class ThingController
       dychart.resize width,height
     return
 
-  loadRealtimeChart: (thingId, $wrapper) =>
+  loadRealtimeChart: (thingId) =>
+    $wrapper = @$element.find('.realtime-chart')
     @realtimeData[thingId] = (0 for i in [0..@realtimePoints-1])
 
     generateFlotRealtimeData = =>
@@ -136,6 +165,8 @@ class ThingController
     return
 
   loadPusher: (thingId) ->
+    return console.warn 'Unable to load realtime socket (Pusher)' unless Pusher?
+
     if window.undercontrol.development
       # Enable pusher logging - don't include this in production
       Pusher.log = (message) ->
