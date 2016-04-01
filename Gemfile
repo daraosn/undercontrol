@@ -13,6 +13,8 @@ gem 'bootstrap_form', '~> 2.3'
 gem 'angularjs-rails', '~> 1.5.0'
 gem 'ngannotate-rails', '~> 1.2.1'
 
+gem 'mysql2'
+
 gem 'pusher', '~> 0.16'
 
 gem 'httparty', '~> 0.13.7'
@@ -49,7 +51,6 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'rspec-rails'
-  gem 'sqlite3'
   gem 'thin'
 end
 
@@ -61,7 +62,6 @@ group :test do
 end
 
 group :production do
-  gem 'pg'
   gem 'rails_12factor'
   gem 'puma'
 end
