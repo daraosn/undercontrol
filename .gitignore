@@ -91,3 +91,6 @@ erd.pdf
 
 # .env
 .env
+
+# database config
+config/database.yml
