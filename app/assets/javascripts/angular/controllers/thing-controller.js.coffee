@@ -15,6 +15,7 @@ class ThingController
     @realtimePeaks = false
     #@historicData = {}
     @realtimeData = {}
+    # TODO: FIXME: potential bug, we shouldn't store lastValues for all things here, this is a shared variable
     @lastValues = {}
 
     @configureScope()

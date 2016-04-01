@@ -99,7 +99,7 @@ class Api::V1::ThingsController < ApplicationController
   end
 
   def get_interval_condition interval
-    interval = interval.to_sym
+    interval = interval.to_s
     date = Time.now
     case interval
     when :year
