@@ -1,455 +1,60 @@
 <link rel='stylesheet' id='redux-google-fonts-stm_option-css'  href='https://fonts.googleapis.com/css?family=Montserrat%3A400%2C700%7COpen+Sans%3A300%2C400%2C600%2C700%2C800%2C300italic%2C400italic%2C600italic%2C700italic%2C800italic&#038;subset=latin&#038;ver=1458838338' type='text/css' media='all' />
-<style>
-#header {
-  z-index: 30;
-}
-.header_top_bar a {
-  font-weight: 600;
-}
-.header_top_bar {
-  width: 100%;
-  color: #aaa;
-  font-weight: 600;
-  z-index: 21;
-}
-.header_top_bar .language-switcher-unit {
-  position: relative;
-  margin: 13px 0 13px;
-  line-height: 1;
-  z-index: 25;
-}
-.header_top_bar .language-switcher-unit .stm_current_language.dropdown_toggle:hover {
-  cursor: pointer;
-}
-.header_top_bar .language-switcher-unit .stm_current_language.dropdown_toggle .fa {
-  margin-left: 6px;
-  font-size: 12px;
-}
-.header_top_bar .header_login_url {
-  margin: 11px 0 12px 42px;
-  line-height: 1;
-}
-.header_top_bar .header_login_url a {
-  display: inline-block;
-  vertical-align: bottom;
-  text-decoration: none !important;
-  line-height: 1;
-}
-.header_top_bar .header_login_url a:hover {
-  color: #fff;
-}
-.header_top_bar .header_login_url a.logout-link {
-  margin-top: 0px;
-}
-.header_top_bar .header_login_url .fa {
-  position: relative;
-  top: 1px;
-  margin-right: 10px;
-}
-.header_top_bar .header_login_url .fa.fa-user {
-  font-size: 14px;
-}
-.header_top_bar .header_top_bar_socs {
-  margin: 12px 0 12px 40px;
-  line-height: 1;
-}
-.header_top_bar .header_top_bar_socs.reversed {
-  margin: 12px 10px 12px 0;
-}
-.header_top_bar .header_top_bar_socs ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.header_top_bar .header_top_bar_socs ul li {
-  float: left;
-  margin-right: 15px;
-  margin-bottom: 0;
-}
-.header_top_bar .header_top_bar_socs ul li a .fa {
-  font-size: 14px;
-}
-.header_top_bar .header_top_bar_socs ul li a:hover {
-  color: #fff;
-}
-.header_top_bar .header_top_bar_socs ul li:last-child {
-  margin-right: 0;
-}
-.header_top_bar .top_bar_info {
-  list-style: none;
-  padding: 0;
-  margin: 11px 0 12px;
-}
-.header_top_bar .top_bar_info li {
-  float: right;
-  margin-left: 33px;
-  margin-bottom: 0;
-  line-height: 14px;
-}
-.header_top_bar .top_bar_info li .fa {
-  font-size: 14px;
-  margin-right: 5px;
-}
-.header_top_bar .top_bar_info li .fa.fa-phone {
-  position: relative;
-  top: 1px;
-}
-.header_top_bar .top_bar_info li:last-child {
-  margin-left: 0;
-}
-.header_default {
-  padding-top: 26px;
-  z-index: 21;
-}
-#header.scrolling {
-  z-index: initial;
-}
-#header.sticky_header .header_default.fixed {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  width: 100%;
-  padding: 14px 0 11px !important;
-  background-color: #fff;
-  z-index: 32;
-  opacity: 1;
-  -webkit-transform: translateZ(0);
-}
-#header.sticky_header .header_default.fixed .header-menu > li {
-  margin-bottom: 0;
-}
-#header.sticky_header .header_default.fixed .header-menu > li > a {
-  color: #333;
-}
-#header.sticky_header .header_default.fixed:after {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  z-index: 10;
-  bottom: -3px;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.1);
-}
-.header_main_menu_wrapper {
-  margin-top: 5px;
-}
-.header_main_menu_wrapper.fixed {
-  margin-top: 9px;
-}
-.header_main_menu_wrapper .header-menu {
-  position: relative;
-  list-style: none;
-  padding: 0;
-  margin: 0 -14px;
-}
-.header_main_menu_wrapper .header-menu > li {
-  position: relative;
-  float: left;
-  padding: 0 14px;
-  z-index: 20;
-}
-.header_main_menu_wrapper .header-menu > li:before {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 35px;
-  z-index: 10;
-  bottom: -30px;
-  left: 0;
-  display: none;
-}
-.header_main_menu_wrapper .header-menu > li > a {
-  display: block;
-  padding: 6px 0 6px;
-  text-transform: uppercase;
-  font-size: 14px;
-  color: #fff;
-  text-decoration: none !important;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu {
-  visibility: hidden;
-  width: 225px;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin: 20px 0 0 -20px;
-  padding: 10px 0 10px 0;
-  background-color: #fff;
-  list-style: none;
-  opacity: 0;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu:before {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  background: #eab830;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li {
-  margin-bottom: 5px;
-  position: relative;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li a {
-  display: block;
-  position: relative;
-  padding: 6px 22px 6px 34px;
-  font-size: 13px;
-  font-weight: 400;
-  z-index: 15;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li.menu-item-has-children a:after {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 8px;
-  height: 7px;
-  z-index: 10;
-  font: normal normal normal 14px/1 FontAwesome;
-  font-size: inherit;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transform: translate(0,0);
-  top: 10px;
-  right: 25px;
-  font-size: 14px;
-  content: "\f105";
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li:last-child {
-  margin-bottom: 0;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li:hover > .sub-menu {
-  visibility: visible;
-  opacity: 1;
-  margin-left: 0;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li > .sub-menu {
-  visibility: hidden;
-  position: absolute;
-  left: 100%;
-  margin-left: 15px;
-  top: -10px;
-  width: 185px;
-  padding: 12px 0 15px;
-  margin-top: 0px;
-  background-color: #fff;
-  list-style: none;
-  opacity: 0;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  z-index: -1;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li > .sub-menu li {
-  margin-bottom: 10px;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li > .sub-menu li:last-child {
-  margin-bottom: 0;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li > .sub-menu li a {
-  display: block;
-  padding: 3px 25px 3px 15px;
-}
-.header_main_menu_wrapper .header-menu > li > ul.sub-menu > li > .sub-menu li a:after {
-  content: '';
-  display: none;
-}
-.header_main_menu_wrapper .header-menu > li:hover:before {
-  display: block;
-}
-.header_main_menu_wrapper .header-menu > li:hover > ul.sub-menu {
-  margin-top: 11px;
-  visibility: visible;
-  opacity: 1;
-}
-.transparent_header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-.transparent_header .header_default {
-  padding-bottom: 25px;
-}
-.transparent_header_off {
-  position: relative;
-  padding-bottom: 0;
-}
-.transparent_header_off .header_default {
-  min-height: 109px;
-  padding: 28px 0 25px;
-  background-color: #fff;
-}
-.transparent_header_off .header_default:after {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  z-index: 10;
-  bottom: -3px;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.1);
-}
-.transparent_header_off .header_default.fixed {
-  min-height: inherit;
-}
-.transparent_header_off .header_main_menu_wrapper {
-  margin-top: 9px;
-}
-.transparent_header_off .header_main_menu_wrapper ul > li > a {
-  color: #333;
-  font-weight: 700;
-}
-.transparent_header_off .header_main_menu_wrapper ul > li > ul.sub-menu > li a {
-  display: block;
-}
-.transparent_header_off .header_main_menu_wrapper ul > li > ul.sub-menu > li a:hover {
-  color: #eab830;
-}
-.logo-unit a:hover {
-  text-decoration: none;
-}
-.logo-unit .logo {
-  text-transform: uppercase;
-  font-size: 22px;
-  color: #fff;
-}
-.logo-unit .logo.img-logo img {
-  max-width: 500px;
-}
-/* from style.css : magic line */
-.magic_line {
-  position: absolute;
-  visibility: hidden;
-  left: 15px;
-  width: 100%;
-  margin-bottom: -9px;
-  bottom: -14px;
-  height: 3px;
-  background-color: #eab830;
-  z-index: 18;
-  opacity: 0;
-}
-.magic_line:after {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 0;
-  height: 0;
-  z-index: 10;
-  top: -3px;
-  left: 50%;
-  margin-left: -3px;
-  border-style: solid;
-  border-width: 0 3px 3px 3px;
-  border-color: transparent transparent #eab830 transparent;
-}
-.magic_line.line_visible {
-  visibility: visible;
-  margin-bottom: 0;
-  opacity: 0.9;
-}
-.lang_dropdown_menu li:last-child {
-  margin-bottom: 0;
-}
-/* css */
-.header-menu{font-family:Montserrat;font-weight:normal;color:#fff;}
-/* from custom css */
-#header > div {
-    padding: 10px 0 10px !important;
-    min-height: 70px !important;
-}
-#header > div > div > div > div.col-md-3.col-sm-12.col-xs-12 > div > a > img {
-    padding-top: 4px !important;
-}
-#header .container {
-    width: 1200px !important;
-    height: 51px !important;
-}
-#header .logo-unit img.img-responsive {
-    margin: 0;
-}
-#header a:hover {
-  text-decoration: none;
-  color: #eab830;
-}
-</style>
 <div id="header" class="transparent_header_off" data-color="">
-            <!-- Check if transparent header chosen -->
-            <div class="header_default">
-                
-<div class="container">
-    <div class="row">
-        <div class="col-md-3 col-sm-12 col-xs-12">
-            <div class="logo-unit">
-                                    <a href="http://undercontrol.io/">
-                        <img class="img-responsive logo_transparent_static visible" src="http://undercontrol.io/wp-content/uploads/2016/03/undercontrol.png" style="width: 253px;" alt="Undercontrol">
-                                            </a>
-                            </div>
-            
-            <!-- Navbar toggle MOBILE -->
-            <button type="button" class="navbar-toggle collapsed hidden-lg hidden-md" data-toggle="collapse" data-target="#header_menu_toggler">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div> <!-- md-3 -->
+    <!-- Check if transparent header chosen -->
+    <div class="header_default">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-12 col-xs-12">
+                    <div class="logo-unit">
+                        <a href="/">
+                            <%= image_tag 'undercontrol402x60.png', class: 'img-responsive logo_transparent_static visible', style: 'width: 253px'%>
+                        </a>
+                    </div>
         
-      
-        
-        
-        <!-- MObile menu -->
-        <div class="col-xs-12 col-sm-12 visible-xs visible-sm">
-            <div class="collapse navbar-collapse header-menu-mobile" id="header_menu_toggler">
-                <ul class="header-menu clearfix">
-                    <li id="menu-item-1510" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-1510"><a href="/">Home</a><div class="magic_line" style="max-width: 0px;"></div></li>
-<li id="menu-item-1588" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1588"><a href="http://undercontrol.io/platform/">Platform</a><div class="magic_line" style="max-width: 0px;"></div></li>
-<li id="menu-item-1519" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1519"><a href="/solutions">Solutions</a><div class="magic_line" style="max-width: 0px;"></div></li>
-<li id="menu-item-1587" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1587"><a href="http://undercontrol.io/community/">Community</a><div class="magic_line" style="max-width: 0px;"></div></li>
-<li id="menu-item-1517" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1517"><a href="/blog?layout=grid">Blog</a><div class="magic_line" style="max-width: 0px;"></div></li>
-                    <li>
-                        <form role="search" method="get" id="searchform-mobile" action="http://undercontrol.io/">
-                            <div class="search-wrapper">
-                                <input placeholder="Search..." type="text" class="form-control search-input" value="" name="s">
-                                <button type="submit" class="search-submit"><i class="fa fa-search"></i></button>
-                            </div>
-                        </form>
-                    <div class="magic_line" style="max-width: 0px;"></div></li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Desktop menu -->
-        <div class="col-md-8 col-md-offset-1 col-sm-9 col-sm-offset-0 hidden-xs hidden-sm">
-                        
-            
-            <div class="header_main_menu_wrapper clearfix" style="margin-top:9px;">
-                
-                
-                <div class="collapse navbar-collapse pull-right">
-                    <ul class="header-menu clearfix">
-                        <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-1510"><a href="/">Home</a><div class="magic_line" style="max-width: 45px;"></div></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1588"><a href="http://undercontrol.io/platform/">Platform</a><div class="magic_line line_visible" style="max-width: 79px;"></div></li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1519"><a href="/solutions">Solutions</a><div class="magic_line" style="max-width: 84px;"></div></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1587"><a href="http://undercontrol.io/community/">Community</a><div class="magic_line" style="max-width: 92px;"></div></li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1517"><a href="/blog?layout=grid">Blog</a><div class="magic_line" style="max-width: 39px;"></div></li>
-                    </ul>
+                    <!-- Navbar toggle MOBILE -->
+                    <button type="button" class="navbar-toggle collapsed hidden-lg hidden-md" data-toggle="collapse" data-target="#header_menu_toggler">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div> <!-- md-3 -->
+                <!-- Mobile menu -->
+                <div class="col-xs-12 col-sm-12 visible-xs visible-sm">
+                    <div class="collapse navbar-collapse header-menu-mobile" id="header_menu_toggler">
+                        <ul class="header-menu clearfix">
+                            <li id="menu-item-1510" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-1510"><a href="<%=home_url%>">Home</a><div class="magic_line" style="max-width: 0px;"></div></li>
+        <li id="menu-item-1588" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1588"><a href="/">Platform</a><div class="magic_line" style="max-width: 0px;"></div></li>
+        <li id="menu-item-1519" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1519"><a href="<%=home_url%>solutions">Solutions</a><div class="magic_line" style="max-width: 0px;"></div></li>
+        <li id="menu-item-1587" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1587"><a href="<%=home_url%>community/">Community</a><div class="magic_line" style="max-width: 0px;"></div></li>
+        <li id="menu-item-1517" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1517"><a href="<%=home_url%>blog?layout=grid">Blog</a><div class="magic_line" style="max-width: 0px;"></div></li>
+                            <li>
+                                <form role="search" method="get" id="searchform-mobile" action="<%=home_url%>">
+                                    <div class="search-wrapper">
+                                        <input placeholder="Search..." type="text" class="form-control search-input" value="" name="s">
+                                        <button type="submit" class="search-submit"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </form>
+                            <div class="magic_line" style="max-width: 0px;"></div></li>
+                        </ul>
+                    </div>
                 </div>
-                
-            </div>
-        </div><!-- md-8 desk menu -->
-        
-    </div> <!-- row -->
-</div> <!-- container -->            </div>
-        </div>
+                <!-- Desktop menu -->
+                <div class="col-md-8 col-md-offset-1 col-sm-9 col-sm-offset-0 hidden-xs hidden-sm">
+                    <div class="header_main_menu_wrapper clearfix" style="margin-top:9px;">
+                        <div class="collapse navbar-collapse pull-right">
+                            <ul class="header-menu clearfix">
+                                <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-1510"><a href="<%=home_url%>">Home</a><div class="magic_line" style="max-width: 45px;"></div></li>
+        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1588"><a href="/">Platform</a><div class="magic_line line_visible" style="max-width: 79px;"></div></li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1519"><a href="<%=home_url%>solutions">Solutions</a><div class="magic_line" style="max-width: 84px;"></div></li>
+        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1587"><a href="<%=home_url%>community/">Community</a><div class="magic_line" style="max-width: 92px;"></div></li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1517"><a href="<%=home_url%>blog?layout=grid">Blog</a><div class="magic_line" style="max-width: 39px;"></div></li>
+                            </ul>
+                        </div>
+            
+                    </div>
+                </div><!-- md-8 desk menu -->
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div>
+</div>
