@@ -1,18 +1,17 @@
-class DashboardController
-  constructor: ($scope, $q, Thing) ->
-    'ngInject'
-    @Thing = Thing
-    @$scope = $scope
-    
-    window.things = $scope.things = Thing.all()
-    $scope.addThing = @addThing
-    $scope.alarmActions = {
-      <% Action.types.each do |key, name| %>
-      '<%=key%>'  : '<%=name%>'
-      <% end %>
-    }
+angular.module('App').controller 'DashboardController', ($scope, $q, Thing) ->
+  'ngInject'
+  new class DashboardController
+    constructor: ->
+      window.things = $scope.things = Thing.all()
+      $scope.alarmActions = {
+        <% Action.types.each do |key, name| %>
+        '<%=key%>'  : '<%=name%>'
+        <% end %>
+      }
 
-  addThing: =>
-    @Thing.create (thing) => @$scope.things.push thing
+      # TODO: move to directive ?
+      $scope.addThing = @addThing
 
-angular.module('App').controller 'DashboardController', DashboardController
+    addThing: ->
+      Thing.create (thing) => $scope.things.push thing
+      return
