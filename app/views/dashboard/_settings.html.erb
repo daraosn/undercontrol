@@ -15,24 +15,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">Alarms</div>
-                <div class="panel-body">
-                    <div class="col-lg-6">
-                        <%= f.number_field :alarm_min, step: 0.001, 'ng-model': "thing.alarm_min" %>
-                        <%= f.number_field :alarm_max, step: 0.001, 'ng-model': "thing.alarm_max" %>
-                        <%= f.number_field :alarm_threshold, 'ng-model': "thing.alarm_threshold" %>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="hidden">
-                            <%= f.text_field :alarm_action, class: 'hidden', 'ng-model': "thing.alarm_action", 'thing-alarm-action':'' %>
-                        </div>
-                        <%= render partial: 'alarm_actions' %>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <div class="clearfix"></div>
 </div>
 <div class="panel-footer">
