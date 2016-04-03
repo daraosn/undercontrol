@@ -1,7 +1,7 @@
 <div class="alert alert-warning" ng-show="thing.alarm_threshold == 0 || (thing.alarm_min >= thing.alarm_max)">
     Alarms actions are disabled since alarm threshold is zero or because the alarm maximum is not greather than the alarm minimum.
     <br>
-    Threshold value represents the number to consecutive values that must be measured out of range before trigerring the alarm.
+    Alarm threshold represents the number of consecutive values that must be measured to change state (trigger/untrigger alarm).
 </div>
 <div ng-hide="thing.alarm_threshold == 0 || (thing.alarm_min >= thing.alarm_max)">
     <div class="form-group">
@@ -38,39 +38,32 @@
                 <label>Headers</label>
                 <textarea class="form-control" ng-model="thing.$alarm_action.headers"></textarea>
             </div> -->
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label>Body</label>
                 <textarea class="form-control" ng-model="thing.$alarm_action.body"></textarea>
-            </div>
+            </div> -->
         </div>
         <div ng-switch-when="mqtt_actuator">
-            <div class="form-group">
-                Your actuator should connect to
-                <code><%= mqtt_server %></code>
-                topic
-                <code>actions/{{ thing.api_key }}</code>
-                <br>
-                <br>
-                Whenever there is a state change caused by the alarm triggering or untriggering, you will receive a JSON with the following keys:
-                <br>
-                <br>
-                <pre class="well">
+            Connect your actuator via MQTT to host
+            <code><%= mqtt_server %></code>
+            topic
+            <code>states/{{ thing.api_key }}</code>
+            <hr>
+            Whenever there is a state change caused by the alarm triggering or untriggering, you will receive a JSON with the following keys:
+            <pre class="well">
 <b>value:</b> <i>(numeric)</i>
 last measured value that caused the state change.
 <br>
 <b>state:</b> <i>(string: high, normal, low)</i>
-reflects whether the last {{ thing.alarm_threshold }} measured value(s) are above the alarm maximum (<i>high</i>), below the alarm minimum (<i>low</i>) or not (<i>normal</i>).
-                </div>
-                Example:
-                <br>
-                <br>
-                <pre>
+the last {{ thing.alarm_threshold }} measured value(s) that caused state change are above the alarm maximum (<i>high</i>),
+below the alarm minimum (<i>low</i>) or in range, causing alarm to untriger (<i>normal</i>).</pre>
+            <hr>
+            Example:
+            <pre>
 {
-    "value": 35,
+    "value": "35.41",
     "state": "high"
-}
-                </pre>
-            </div>
+}</pre>
         </div>
     </div>
 </div>

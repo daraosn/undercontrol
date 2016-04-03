@@ -7,6 +7,52 @@ class Thing < ActiveRecord::Base
   validates_inclusion_of :alarm_threshold, :in => 0..10
   validate :alarm_min_max
 
+  def reset_api_key!
+    self.set_api_key
+    save!
+  end
+
+  def check_alarm
+    # do not trigger alarm if alarm's action, threshold or range invalid
+    return if (self.alarm_action.blank?) or (self.alarm_threshold == 0) or (self.alarm_min >= self.alarm_max)
+
+    # assume that alarms are triggered high/low and discard from there
+    alarm_trigger_high = true
+    alarm_trigger_low = true
+
+    # grab X last measurements
+    measurements = self.measurements.last(self.alarm_threshold)
+    # check if all X last measurements are in range
+    measurements.map! do |measurement|
+      value = measurement.value
+      if value > self.alarm_max
+        :high
+      elsif value < self.alarm_min
+        :low
+      else
+        :normal
+      end
+    end
+
+    if measurements.uniq.length == 1
+      update_state measurements.last
+    end
+  end
+
+  private
+
+  def update_state state
+    if (state == :normal and alarm_triggered) or (state != :normal and not alarm_triggered)
+      # Important: state must be updated first to avoid racing conditions and multiple action triggering
+      self.update alarm_triggered: state != :normal
+      Action.change_state(self, state)
+    end
+  end
+
+  ###
+  # Callbacks
+  ###
+
   def set_api_key
     require 'securerandom'
     # find a free api key (in case of collisions)
@@ -16,66 +62,14 @@ class Thing < ActiveRecord::Base
     self.api_key = new_api_key
   end
 
-  def reset_api_key!
-    self.set_api_key
-    save!
-  end
+  ###
+  # Validations
+  ###
 
   def alarm_min_max
     unless (self.alarm_min < self.alarm_max) or (self.alarm_min == 0 and self.alarm_max == 0)
       errors.add :alarm_min, "should be lower than the alarm maximum"
     end
-  end
-
-  def check_alarm
-    # do not trigger alarm if alarm's action, threshold or range are not set (null or equal to 0)
-    return if (self.alarm_action.blank?) or (not self.alarm_threshold) or (self.alarm_threshold == 0) or (self.alarm_min == self.alarm_max)
-    # alarm is triggered by default, unless we tell not to
-    trigger_alarm = true
-    # grab X last measurements
-    measurements = self.measurements.last(self.alarm_threshold)
-    # check if all X last measurements are in range
-    measurements.each do |measurement|
-      # check if alarm is in range, if so disable the trigger and break the loop
-      if measurement.value >= self.alarm_min and measurement.value <= self.alarm_max
-        trigger_alarm = false
-        break
-      end
-    end
-    # check where to trigger
-    if trigger_alarm
-      # one measurement is enough, because we already know the alarm was not in normal range
-      if measurements.last.value > self.alarm_max
-        trigger_alarm = :high
-      else
-        trigger_alarm = :low
-      end
-    end
-    # finish check and decide what to do
-    if trigger_alarm
-      self.trigger_alarm trigger_alarm
-    else
-      self.untrigger_alarm
-    end
-  end
-
-  def trigger_alarm state
-    # TODO: we will let the action control multiple notifications
-    # # do not trigger alarm if has already been triggered (i.e. to avoid spamming)
-    # return if self.alarm_triggered
-    # TODO: .
-    # else we change the state and execute its action
-    Action.do(self, state)
-    self.update alarm_triggered: true
-  end
-
-  def untrigger_alarm
-    # TODO: we will let the action control multiple notifications
-    # # do not untrigger if it's already untriggered
-    # return unless self.alarm_triggered
-    # TODO: .
-    Action.do(self, :normal)
-    self.update alarm_triggered: false
   end
 
 end

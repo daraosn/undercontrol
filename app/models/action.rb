@@ -13,74 +13,90 @@ class Action
     }
   end
 
-  def self.do thing, state = :normal
-    ###
-    # TODO: SUPER IMPORTANT WARNING!
-    # If an HTTP GET or HTTP POST is configured to the same Thing that trigger the alarm,
-    # it will create an infinite loop, avoid this by checking if the URL contains the api_key.
-    # If so, then do not excecute the call. Add a check+test before creating the alarm too.
-    ###
+  def self.change_state thing, state = :normal
     ###
     # TODO: WARNING: these action should not be done syncronously, it could block the webserver if takes too long!
     #                actions should be asyncronous and queued using Resque or a similar manager.
     ###
 
     json = thing.alarm_action
-    action = JSON.parse json, symbolize_names: true
-    type = action[:type].to_sym
+    action = JSON.parse json, object_class: OpenStruct
+    action.state = state
+    action.thing = thing
+    action.value = thing.measurements.last.value
 
-    ###
-    # TODO: for now we notify untrigerred alarms to mqtt_actuators only, for http get, post and email we need additional fields/templates.
-    #       also return if the state is not normal but the alarm has already been trigerred.
-    ###
-    if type != :mqtt_actuator
-      return if state == :normal # and not thing.alarm_notify_untriggered
-      return if state != :normal and thing.alarm_triggered
-    else
-      # if is mqtt actuator, we will return if the alarm is no longer triggered
-      return if state == :normal and not thing.alarm_triggered
-    end
+    self.do action
+  end
 
-    # KEEP FOR DEBUG:
-    puts "#{Time.now.to_f * 1000} | Action: #{type}, by thing: #{thing.id}"
-    
-    case type
+  def self.abort action
+    puts "#{Time.now.to_f * 1000} | ABORTED: Action: #{action.type}, by thing: #{action.thing.id}"
+  end
+
+  def self.do action
+    puts "#{Time.now.to_f * 1000} | DO: Action: #{action.type}, by thing: #{action.thing.id}"
+
+    case action.type.to_sym
     when :send_email
-      # TODO: later enable custom emails, for now we use user account's email (taken from thing.user)
-      #email = action[:email]
-      AlarmMailer.alarm_triggered(thing).deliver!
+      self.do_email action
     when :http_get
       self.do_get_request action
     when :http_post
       self.do_post_request action
     when :mqtt_actuator
-      MQTT::Client.connect(Rails.application.secrets.mqtt_server) do |c|
-        c.publish("actions/" + thing.api_key, { value: thing.measurements.last.value, state: state }.to_json)
-      end
+      self.do_mqtt_pub action
     else
-      raise "Undefined Action type: #{type}"
+      raise "Undefined Action type: #{action.type}"
     end
   end
 
-  def self.new_send_email email, message=""
-    { type: :send_email, email: email, message: message }.to_json
-  end
-
-  def self.new_http_get url, headers=""
-    { type: :http_get, url: url, headers: headers }.to_json
-  end
-
-  def self.new_http_get url, body, headers=""
-    { type: :http_post, url: url, body: body, headers: headers }.to_json
+  def self.do_email action
+    return abort action if action.state == :normal
+    # TODO: later enable custom emails, for now we use user account's email (taken from thing.user)
+    AlarmMailer.alarm_triggered(action.thing).deliver!
   end
 
   def self.do_get_request action
-    puts 'GET request to url: ' + action[:url]
-    HTTParty.get(action[:url], timeout: REQUEST_TIMEOUT).body#, headers: action[:headers]).body
-    puts 'GET request done!'
+    return abort action unless check_url action.url
+    url = inject_undercontrol_url_params action.url, action.value, action.state
+    HTTParty.get(url, timeout: REQUEST_TIMEOUT).body
   end
 
   def self.do_post_request action
-    HTTParty.post(action[:url], timeout: REQUEST_TIMEOUT, body: action[:body]).body#, headers: action[:headers]).body
+    return abort action unless check_url action.url
+    body = inject_undercontrol_params "", action.value, action.state
+    HTTParty.post(action.url, timeout: REQUEST_TIMEOUT, body: body).body
   end
+
+  def self.do_mqtt_pub action
+    MQTT::Client.connect(Rails.application.secrets.mqtt_server) do |c|
+      # Important: when modifying `topic` below, remember to update `_alarm_actions` partial view
+      topic = "states/" + action.thing.api_key
+      c.publish(topic, { value: action.value, state: action.state }.to_json)
+    end
+  end
+
+  private
+
+  def self.check_url url
+    (url =~ Regexp.new(Rails.application.secrets.domain_name, 'i')).blank?
+  end
+
+  def self.inject_undercontrol_url_params url, value, state
+    uri =  URI.parse url
+    uri.query = inject_undercontrol_params uri.query, value, state
+    uri.to_s
+  end
+
+  def self.inject_undercontrol_params query_string, value, state
+    query_string ||= ""
+    our_params = undercontrol_params value, state, true
+    their_params = URI.decode_www_form query_string
+    URI.encode_www_form their_params + our_params
+  end
+
+  def self.undercontrol_params value, state, array=false
+    hash = { undercontrol_value: value, undercontrol_state: state }
+    return array ? hash.collect { |k,v| [k, v] } : hash
+  end
+
 end
