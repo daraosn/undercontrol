@@ -44,6 +44,8 @@ class Action
       self.do_post_request action
     when :mqtt_actuator
       self.do_mqtt_pub action
+    when :test
+      self.do_test action
     else
       raise "Undefined Action type: #{action.type}"
     end
@@ -73,6 +75,10 @@ class Action
       topic = "states/" + action.thing.api_key
       c.publish(topic, { value: action.value, state: action.state }.to_json)
     end
+  end
+
+  def self.do_test action
+    puts "test action triggered!"
   end
 
   private

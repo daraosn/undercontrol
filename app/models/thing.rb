@@ -13,12 +13,8 @@ class Thing < ActiveRecord::Base
   end
 
   def check_alarm
-    # do not trigger alarm if alarm's action, threshold or range invalid
-    return if (self.alarm_action.blank?) or (self.alarm_threshold == 0) or (self.alarm_min >= self.alarm_max)
-
-    # assume that alarms are triggered high/low and discard from there
-    alarm_trigger_high = true
-    alarm_trigger_low = true
+    # do not trigger alarm if alarm's action, threshold or range are invalid
+    return false if (self.alarm_action.blank?) or (self.alarm_threshold == 0) or (self.alarm_min >= self.alarm_max)
 
     # grab X last measurements
     measurements = self.measurements.last(self.alarm_threshold)
