@@ -3,6 +3,7 @@ angular.module('App').controller 'DashboardController', ($scope, $q, Thing) ->
   new class DashboardController
     constructor: ->
       window.things = $scope.things = Thing.all()
+      # NOTE: to see changes reflected, sprockets cache must be cleared
       $scope.alarmActions = {
         <% Action.types.each do |key, name| %>
         '<%=key%>'  : '<%=name%>'

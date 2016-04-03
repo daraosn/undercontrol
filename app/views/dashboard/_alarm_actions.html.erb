@@ -46,9 +46,9 @@
         <div ng-switch-when="mqtt_actuator">
             <div class="form-group">
                 Your actuator should connect to
-                <code>mqtt.undercontrol.io</code>
+                <code><%= mqtt_server %></code>
                 topic
-                <code>action/{{ thing.api_key }}</code>
+                <code>actions/{{ thing.api_key }}</code>
                 <br>
                 <br>
                 Whenever there is a state change caused by the alarm triggering or untriggering, you will receive a JSON with the following keys:
