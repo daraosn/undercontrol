@@ -4,32 +4,19 @@
             <div class="panel panel-default">
                 <div class="panel-heading">General</div>
                 <div class="panel-body">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <%= f.text_field :name, 'ng-model': "thing.name" %>
                         <%= f.text_field :description, 'ng-model': "thing.description" %>
                     </div>
-                    <div class="col-lg-6">
+                    <!-- <div class="col-lg-6">
                         <%= f.number_field :range_min, step: 0.001, 'ng-model': "thing.range_min" %>
                         <%= f.number_field :range_max, step: 0.001, 'ng-model': "thing.range_max" %>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
         
         <div class="clearfix"></div>
 </div>
-<div class="panel-footer">
-    <div class="settings-save btn btn-success" ng-click="saveThing()">
-        <%= icon 'download' %>
-        Save
-    </div>
-    <span class="settings-save-success">
-        <%= icon 'check' %>
-        Saved!
-    </span>
-    <div class="settings-danger btn btn-danger" ng-click="deleteThing($index)" style="float:right"> 
-        <%= icon 'trash' %>
-        Delete
-    </div>
-</div>
+<%= render partial: 'thing_save' %>
 <% end %>

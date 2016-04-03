@@ -1,0 +1,14 @@
+<div class="panel-footer">
+    <div class="settings-save btn btn-success" ng-click="saveThing()">
+        <%= icon 'download' %>
+        Save
+    </div>
+    <span class="settings-save-success">
+        <%= icon 'check' %>
+        Saved!
+    </span>
+    <div class="settings-danger btn btn-danger" ng-click="deleteThing($index)" style="float:right"> 
+        <%= icon 'trash' %>
+        Delete
+    </div>
+</div>

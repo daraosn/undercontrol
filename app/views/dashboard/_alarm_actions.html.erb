@@ -1,40 +1,76 @@
-<div class="form-group">
-    <label>Action Type</label>
-    <select class="form-control" ng-options="k as v for (k, v) in alarmActions" ng-model="thing.$alarm_action.type"></select>
+<div class="alert alert-warning" ng-show="thing.alarm_threshold == 0 || (thing.alarm_min >= thing.alarm_max)">
+    Alarms actions are disabled since alarm threshold is zero or because the alarm maximum is not greather than the alarm minimum.
+    <br>
+    Threshold value represents the number to consecutive values that must be measured out of range before trigerring the alarm.
 </div>
-<div ng-switch="thing.$alarm_action.type">
-    <div ng-switch-when="send_email">
-        <div class="form-group">
-            <label>Email Address</label>
-            <input type="text" class="form-control" ng-model="thing.$alarm_action.email" disabled>
-        </div>
-        <!-- <div class="form-group">
-            <label>Message</label>
-            <input type="text" class="form-control" ng-model="thing.$alarm_action.message">
-        </div> -->
+<div ng-hide="thing.alarm_threshold == 0 || (thing.alarm_min >= thing.alarm_max)">
+    <div class="form-group">
+        <label>Action Type</label>
+        <select class="form-control" ng-options="k as v for (k, v) in alarmActions" ng-model="thing.$alarm_action.type"></select>
     </div>
-    <div ng-switch-when="http_get">
-        <div class="form-group">
-            <label>URL</label>
-            <input type="text" class="form-control" ng-model="thing.$alarm_action.url">
+    <div ng-switch="thing.$alarm_action.type">
+        <div ng-switch-when="send_email">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="text" class="form-control" ng-model="thing.$alarm_action.email" disabled>
+            </div>
+            <!-- <div class="form-group">
+                <label>Message</label>
+                <input type="text" class="form-control" ng-model="thing.$alarm_action.message">
+            </div> -->
         </div>
-        <!-- <div class="form-group">
-            <label>Headers</label>
-            <textarea class="form-control" ng-model="thing.$alarm_action.headers"></textarea>
-        </div> -->
-    </div>
-    <div ng-switch-when="http_post">
-        <div class="form-group">
-            <label>URL</label>
-            <input type="text" class="form-control" ng-model="thing.$alarm_action.url">
+        <div ng-switch-when="http_get">
+            <div class="form-group">
+                <label>URL</label>
+                <input type="text" class="form-control" ng-model="thing.$alarm_action.url">
+            </div>
+            <!-- <div class="form-group">
+                <label>Headers</label>
+                <textarea class="form-control" ng-model="thing.$alarm_action.headers"></textarea>
+            </div> -->
         </div>
-        <!-- <div class="form-group">
-            <label>Headers</label>
-            <textarea class="form-control" ng-model="thing.$alarm_action.headers"></textarea>
-        </div> -->
-        <div class="form-group">
-            <label>Body</label>
-            <textarea class="form-control" ng-model="thing.$alarm_action.body"></textarea>
+        <div ng-switch-when="http_post">
+            <div class="form-group">
+                <label>URL</label>
+                <input type="text" class="form-control" ng-model="thing.$alarm_action.url">
+            </div>
+            <!-- <div class="form-group">
+                <label>Headers</label>
+                <textarea class="form-control" ng-model="thing.$alarm_action.headers"></textarea>
+            </div> -->
+            <div class="form-group">
+                <label>Body</label>
+                <textarea class="form-control" ng-model="thing.$alarm_action.body"></textarea>
+            </div>
+        </div>
+        <div ng-switch-when="mqtt_actuator">
+            <div class="form-group">
+                Your actuator should connect to
+                <code>mqtt.undercontrol.io</code>
+                topic
+                <code>action/{{ thing.api_key }}</code>
+                <br>
+                <br>
+                Whenever there is a state change caused by the alarm triggering or untriggering, you will receive a JSON with the following keys:
+                <br>
+                <br>
+                <pre class="well">
+<b>value:</b> <i>(numeric)</i>
+last measured value that caused the state change.
+<br>
+<b>state:</b> <i>(string: high, normal, low)</i>
+reflects whether the last {{ thing.alarm_threshold }} measured value(s) are above the alarm maximum (<i>high</i>), below the alarm minimum (<i>low</i>) or not (<i>normal</i>).
+                </div>
+                Example:
+                <br>
+                <br>
+                <pre>
+{
+    "value": 35,
+    "state": "high"
+}
+                </pre>
+            </div>
         </div>
     </div>
 </div>
