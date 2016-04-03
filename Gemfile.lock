@@ -159,6 +159,7 @@ GEM
     mime-types (2.99.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
+    mqtt (0.3.1)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -354,6 +355,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   launchy
+  mqtt (~> 0.3.1)
   mysql2
   ngannotate-rails (~> 1.2.1)
   payola-payments

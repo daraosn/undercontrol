@@ -27,6 +27,8 @@ gem 'payola-payments'
 gem 'sucker_punch'
 gem 'upmin-admin'
 
+gem 'mqtt', '~> 0.3.1'
+
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'spring'
