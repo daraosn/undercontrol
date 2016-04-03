@@ -74,7 +74,6 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
         return
 
       loadThingUI: (thing, $element) =>
-        debugger
         @$saveSuccess = $element.find('.settings-save-success').hide()
         @loadUI $element, thing
         @loadHistoricChart thing.id
