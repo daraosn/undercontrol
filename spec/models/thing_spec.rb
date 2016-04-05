@@ -7,6 +7,10 @@ describe Thing do
 
   subject { @thing }
 
+  it "exists" do
+    expect {(@thing).to exist}
+  end
+
   it "has default values for alarm" do
     expect(@thing.alarm_min).to eq 0
     expect(@thing.alarm_max).to eq 0
