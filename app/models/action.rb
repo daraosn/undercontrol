@@ -81,6 +81,22 @@ class Action
     puts "test action triggered!"
   end
 
+  def self.new_send_email email#, message=""
+    { type: :send_email, email: email }.to_json
+  end
+
+  def self.new_http_get url
+    { type: :http_get, url: url }.to_json
+  end
+
+  def self.new_http_get url#, body, headers=""
+    { type: :http_post, url: url }.to_json
+  end
+
+  def self.new_mqtt_actuator
+    { type: :mqtt_actuator, url: url }.to_json
+  end
+
   private
 
   def self.check_url url
