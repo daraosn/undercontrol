@@ -35,8 +35,6 @@ class Thing < ActiveRecord::Base
     end
   end
 
-  private
-
   def update_state state
     if (state == :normal and alarm_triggered) or (state != :normal and not alarm_triggered)
       # Important: state must be updated first to avoid racing conditions and multiple action triggering
