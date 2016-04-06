@@ -28,14 +28,14 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
         $scope.hideApiUrlTextbox = @hideApiUrlTextbox
         $scope.thing.randomValue = Math.round Math.random() * 100
 
-        $scope.historicChartintervals =
+        $scope.historicChartRanges =
           hour: '1 hour'
           day: '1 day'
           week: '1 week'
           month: '1 month'
           year: '1 year'
-        $scope.historicChartInterval = 'day'
-        $scope.changeHistoricChartInterval = @changeHistoricChartInterval
+        $scope.historicChartRange = 'day'
+        $scope.changehistoricChartRange = @changehistoricChartRange
 
       saveThing: =>
         $scope.thing.$update =>
@@ -49,7 +49,7 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
             @unloadThing()
         return
 
-      changeHistoricChartInterval: =>
+      changehistoricChartRange: =>
         @loadHistoricChart $scope.thing.id
         return
 
@@ -86,7 +86,7 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
 
       loadHistoricChart: (thingId) ->
         $wrapper = $element.find('.historic-chart')
-        url = @thingMeasurementsUrl.replace(':thing_id', thingId) + '.csv' + '?interval=' + $scope.historicChartInterval
+        url = @thingMeasurementsUrl.replace(':thing_id', thingId) + '.csv' + '?range=' + $scope.historicChartRange
         dychart = new Dygraph $wrapper.get(0), url
         $scope.historicChart = dychart
         width = dychart.width_

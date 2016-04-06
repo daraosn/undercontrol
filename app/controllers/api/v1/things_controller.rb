@@ -69,7 +69,7 @@ class Api::V1::ThingsController < ApplicationController
     thing_id = params[:thing_id]
     fields = [:created_at, :value]
     interval = params[:interval] or :day
-    conditions = get_interval_condition params[:interval]
+    conditions = get_range_condition params[:range]
     # puts '(1) memory_usage: ' + `ps -o rss= -p #{$$}`
     @measurements = current_user.things.find(thing_id).measurements.select(fields).where(conditions)
     # limit number of results
@@ -108,10 +108,11 @@ class Api::V1::ThingsController < ApplicationController
     csv
   end
 
-  def get_interval_condition interval
-    interval = interval.to_s
+  def get_range_condition range
+    range ||= :day
+    range = range.to_sym
     date = Time.now
-    case interval
+    case range
     when :year
       date -= 1.year
     when :month
