@@ -17,12 +17,16 @@
                         <div class="tab-pane fade" id="settings-{{ thing.id }}">
                             <%= render partial: 'settings' %>
                         </div>
-                        <div class="tab-pane fade" id="api-{{ thing.id }}">
-                            <%= render partial: 'api' %>
-                        </div>
                         <div class="tab-pane fade" id="action-{{ thing.id }}">
                             <%= render partial: 'action' %>
                         </div>
+                        <div class="tab-pane fade" id="api-{{ thing.id }}">
+                            <%= render partial: 'api' %>
+                        </div>
+                        <div class="tab-pane fade" id="sdk-{{ thing.id }}">
+                            <%= render partial: 'sdk' %>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
