@@ -70,10 +70,20 @@ class Api::V1::ThingsController < ApplicationController
     fields = [:created_at, :value]
     interval = params[:interval] or :day
     conditions = get_interval_condition params[:interval]
+    # puts '(1) memory_usage: ' + `ps -o rss= -p #{$$}`
     @measurements = current_user.things.find(thing_id).measurements.select(fields).where(conditions)
+    # limit number of results
+    count = @measurements.count(:all)
+    max = 1000
+    if count > max
+      @measurements = @measurements.to_a.shuffle.select.each_with_index do |_,i|
+        i % (count / max) == 0
+      end
+    end
+    # puts '(2) memory_usage: ' + `ps -o rss= -p #{$$}`
     respond_to do |format|
       format.json {
-        render json: @measurements.as_json(only: fields)
+        render json: @measurements.as_json(only: fields) # Oj.dump(@measurements, mode: :compat)
       }
       format.csv {
         render text: create_csv(@measurements, fields)
