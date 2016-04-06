@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   as :user do
     get "login", to: "devise/sessions#new", as: :new_user_session
     post "login", to: "devise/sessions#create", as: :user_session
-    get "logout", to: "devise/sessions#destroy"
+    delete "logout", to: "devise/sessions#destroy", as: :destroy_user_session
+
     scope :register do
       get "/", to: "auth/registrations#new", as: :new_user_registration
       post "/", to: "auth/registrations#create", as: :user_registration
