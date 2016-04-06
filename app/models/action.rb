@@ -78,7 +78,7 @@ class Action
   end
 
   def self.do_test action
-    puts "test action triggered!"
+    puts state: action.state 
   end
 
   def self.new_send_email email#, message=""

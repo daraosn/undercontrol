@@ -70,9 +70,21 @@ describe Thing do
         expect {
           @thing.measurements << Measurement.new(value: 10)
         }.to change { @thing.alarm_triggered }
-
       end
 
+      it "should trigger low alarm after triggering high alarm" do
+        expect {
+          @thing.measurements << Measurement.new(value: 21)
+          @thing.measurements << Measurement.new(value: 21)
+          @thing.measurements << Measurement.new(value: 21)
+        }.to change { @thing.alarm_triggered }
+        expect {
+          @thing.measurements << Measurement.new(value: 9)
+          @thing.measurements << Measurement.new(value: 9)
+          @thing.measurements << Measurement.new(value: 9)
+        }.to change { @thing.alarm_triggered }
+
+      end
     end
 
   end
