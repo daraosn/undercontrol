@@ -166,7 +166,7 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
         @realtimeTimerId = setInterval updateFlot, @realtimeRefreshRate
         return
 
-      loadPusher: (thingId) ->
+      loadPusher: (thingApiKey) ->
         return console.warn 'Unable to load realtime socket (Pusher)' unless Pusher?
 
         if window.undercontrol.development
@@ -177,7 +177,7 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
             return
 
         pusher = new Pusher('b35a4fcab94f68f53468', encrypted: true)
-        channel = pusher.subscribe("things-#{thingId}-measurements")
+        channel = pusher.subscribe("things-#{thingApiKey}-measurements")
         channel.bind 'new', (point) =>
           @lastValues[thingId] = point.value
           #@historicData.push point
