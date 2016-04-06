@@ -4,6 +4,8 @@ FactoryGirl.define do
     api_key "MyString"
     name "MyString"
     description "MyString"
+    sensor_type "MyString"
+    unit "MyString"
     alarm_max "9.99"
     alarm_min "9.99"
     alarm_threshold 1

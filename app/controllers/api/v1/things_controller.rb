@@ -50,7 +50,7 @@ class Api::V1::ThingsController < ApplicationController
   def update
     thing_params = params[:thing]
     if thing = current_user.things.find(thing_params[:id])
-      thing.update thing_params.permit(:name, :description, :range_min, :range_max, :alarm_action, :alarm_min, :alarm_max, :alarm_threshold)
+      thing.update thing_params.permit(:name, :description, :unit, :sensor_type, :range_min, :range_max, :alarm_action, :alarm_min, :alarm_max, :alarm_threshold)
     end
     render json: thing
   end
