@@ -10,10 +10,8 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
         @realtimeRefreshRate = 1000 # ms
         @realtimePoints = 1000 / @realtimeRefreshRate * @realtimeLastMinutes * 60
         @realtimePeaks = false
+        @realtimeData = []
         #@historicData = {}
-        @realtimeData = {}
-        # TODO: FIXME: potential bug, we shouldn't store lastValues for all things here, this is a shared variable
-        @lastValues = {}
 
         @configureScope()
         @loadThingUI $scope.thing, $element
@@ -26,7 +24,8 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
         $scope.deleteThing = @deleteThing
         $scope.showApiUrlTextbox = @showApiUrlTextbox
         $scope.hideApiUrlTextbox = @hideApiUrlTextbox
-        $scope.thing.randomValue = Math.round Math.random() * 100
+        $scope.randomValue = Math.round Math.random() * 100
+        $scope.realtimeStarted = false
 
         $scope.historicChartRanges =
           hour: '1 hour'
@@ -49,6 +48,18 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
             @unloadThing()
         return
 
+      updateLastValue: (value, time) ->
+        #TODO: #@historicData.push point
+        @$lastValueChange.stop(true,true).fadeTo(1, 1).fadeTo(3000, 0.5)
+        $scope.lastChange = "right"
+        if $scope.lastValue
+          $scope.lastChange = "up" if value > $scope.lastValue
+          $scope.lastChange = "down" if value < $scope.lastValue
+        time = new Date unless time
+        $scope.lastValue = Number(value)
+        $scope.lastUpdated = new Date(time).toString()
+        $scope.$apply()
+
       changehistoricChartRange: =>
         @loadHistoricChart $scope.thing.id
         return
@@ -70,15 +81,17 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
         return
 
       resetApiKey: ->
-        $scope.thing.$resetApiKey()
+        if confirm "Are you sure you want to reset the API Key?"
+          $scope.thing.$resetApiKey()
         return
 
       loadThingUI: (thing, $element) =>
         @$saveSuccess = $element.find('.settings-save-success').hide()
+        @$lastValueChange = $element.find('.last-value-change').hide()
         @loadUI $element, thing
         @loadHistoricChart thing.id
         @loadRealtimeChart thing.id
-        @loadPusher thing.id
+        @loadPusher thing.api_key
         return
 
       loadUI: ($element, thing) ->
@@ -98,12 +111,12 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
 
       loadRealtimeChart: (thingId) ->
         $wrapper = $element.find('.realtime-chart')
-        @realtimeData[thingId] = (0 for i in [0..@realtimePoints-1])
+        @realtimeData = (null for i in [0..@realtimePoints-1])
 
         generateFlotRealtimeData = =>
           points = []
-          for i in [0..@realtimeData[thingId].length - 1]
-            points.push [i, @realtimeData[thingId][i]]
+          for i in [0..@realtimeData.length - 1]
+            points.push [i, @realtimeData[i]]
           series = [{
             data: points
             lines:
@@ -116,16 +129,16 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
             url: @thingMeasurementsUrl.replace(':thing_id', thingId) + '.json'
             contentType: 'json'
             success: (data) =>
-              #@historicData = data
-              @lastValues[thingId] = _(data).last()?.value
+              if lastMeasurement = _(data).last()
+                @updateLastValue lastMeasurement[1], lastMeasurement[0]
               return
 
         pollData()    
 
         updateFlot = =>
-          @realtimeData[thingId] = @realtimeData[thingId].slice(1)
-          @realtimeData[thingId].push(@lastValues[thingId] or 0)
-          @lastValues[thingId] = 0 if @realtimePeaks
+          if $scope.realtimeStarted
+            @realtimeData = @realtimeData.slice(1)
+            @realtimeData.push($scope.lastValue)
           $scope.realtimeChart = $.plot($wrapper, generateFlotRealtimeData(),
             grid:
               borderWidth: 1
@@ -155,10 +168,10 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
               tickFormatter: -> ''
             yaxis:
               # TODO: use this method or find a better way for min/max
-              # min: _.min @realtimeData[thingId]
-              # max: _.max @realtimeData[thingId]
-              min: _.min(@realtimeData[thingId]) * 0.8
-              max: _.max(@realtimeData[thingId]) * 1.25
+              # min: _.min @realtimeData
+              # max: _.max @realtimeData
+              min: _.min(@realtimeData) * 0.8
+              max: _.max(@realtimeData) * 1.25
             legend:
               show: true
           )
@@ -179,8 +192,8 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
         pusher = new Pusher('b35a4fcab94f68f53468', encrypted: true)
         channel = pusher.subscribe("things-#{thingApiKey}-measurements")
         channel.bind 'new', (point) =>
-          @lastValues[thingId] = point.value
-          #@historicData.push point
+          $scope.realtimeStarted = true
+          @updateLastValue point.value
           return
 
         return

@@ -4,8 +4,20 @@
         <div id="thing-{{ thing.id }}" class="thing">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3>{{ thing.name }}</h3>
-                    <i style="color: #999">{{ thing.description }}</i>
+                    <div class="pull-left">
+                        <h3>{{ thing.name }}</h3>
+                        <i style="color: #999">{{ thing.description }}</i>
+                    </div>
+                    <div class="pull-right">
+                        <h3 style="text-align: right">
+                            <i class="last-value-change fa fa-arrow-{{ lastChange }}"></i>
+                            {{ lastValue }}
+                        </h3>
+                        <i style="color: #999">
+                            {{ lastUpdated }}
+                        </i>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="panel-body" style="min-height: 500px">
                     <%= render partial: 'thing_nav' %>
