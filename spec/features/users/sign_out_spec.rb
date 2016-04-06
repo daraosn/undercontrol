@@ -13,7 +13,7 @@ feature 'Sign out', :devise do
     signin(user.email, user.password)
     expect(page).to have_content I18n.t 'devise.sessions.signed_in'
     click_link 'Logout'
-    expect(page).to have_content I18n.t 'devise.failure.unauthenticated' #TODO: Should be devise.sessions.signed_out
+    expect(page).to have_content I18n.t 'devise.sessions.signed_out'
   end
 
 end
