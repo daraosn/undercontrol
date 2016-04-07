@@ -42,5 +42,8 @@ class Thing
       delete:
         url: '/api/v1/things/:id'
         method: "DELETE"
+      addMeasurement:
+        url: '/api/v1/things/measurements'
+        method: 'POST'
 
 angular.module('App').factory 'Thing', Thing
