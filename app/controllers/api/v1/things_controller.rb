@@ -15,7 +15,7 @@ class Api::V1::ThingsController < ApplicationController
       thing.measurements << measurement
       measurement.save!
       if measurement.persisted?
-        Pusher.trigger("things-#{thing.id}-measurements", 'new', measurement.as_json) rescue false
+        Pusher.trigger("things-#{thing.api_key}-measurements", 'new', measurement.as_json) rescue false
         return render json: { success: true, errors: [] }
       end
     else
@@ -67,25 +67,40 @@ class Api::V1::ThingsController < ApplicationController
 
   def get_measurements
     thing_id = params[:thing_id]
-    fields = [:created_at, :value]
-    interval = params[:interval] or :day
-    conditions = get_interval_condition params[:interval]
-    @measurements = current_user.things.find(thing_id).measurements.select(fields).where(conditions)
+
+    if current_user.things.find(thing_id).blank?
+      return head :not_found
+    else
+      # old, slow query:
+      #@measurements = Thing.find(thing_id).measurements.select(fields).where(conditions)
+
+      # TODO: IMPORTANT: clean up and move to model! (fat controller)
+      # new query:
+      fields = [:created_at, :value]
+      measurements = []
+      if last_measurement = Thing.find(thing_id).measurements.last
+        sql_range = get_range_condition params[:range], last_measurement.created_at
+
+        sql_fields = fields.blank? ? '*' : '`' + fields.join('`, `') + '`' 
+        sql_query = sql_sanitize ["SELECT #{sql_fields} FROM measurements WHERE thing_id = ?", thing_id]
+        sql_query+= " AND " + sql_sanitize(sql_range)
+        measurements = ActiveRecord::Base.connection.execute sql_query
+        measurements = reduce_array measurements.to_a, 1000
+      end
+    end
+
     respond_to do |format|
       format.json {
-        render json: @measurements.as_json(only: fields)
+        render json: measurements.as_json(only: fields) # Oj.dump(measurements, mode: :compat)
       }
       format.csv {
-        render text: create_csv(@measurements, fields)
+        render text: array_to_csv(measurements, fields)
       }
     end
-    #render json: Measurement.where("strftime('%H', created_at) >= ?", Time.zone.now.hour)
-    #render json: Measurement.where("HOUR(created_at) = ?", Time.zone.now.hour)
-    #render json: Measurement.where("created_at >= ?", Time.zone.now.beginning_of_day)
   end
 
   private
-  def create_csv data, fields, separator = ','
+  def hash_to_csv data, fields, separator = ','
     csv = fields.join(separator) + "\n"
     data.each do |value|
       line = []
@@ -98,10 +113,19 @@ class Api::V1::ThingsController < ApplicationController
     csv
   end
 
-  def get_interval_condition interval
-    interval = interval.to_s
-    date = Time.now
-    case interval
+  def array_to_csv array, fields = false, separator = ','
+    csv = ""
+    csv += fields.to_csv unless fields.blank?
+    array.each do |line|
+      csv += line.to_csv
+    end
+    csv
+  end
+
+  def get_range_condition range, date = Time.now
+    range ||= :day
+    range = range.to_sym
+    case range
     when :year
       date -= 1.year
     when :month
@@ -114,6 +138,22 @@ class Api::V1::ThingsController < ApplicationController
       date -= 1.day
     end
     ['created_at >= ?', date]
+  end
+
+  def reduce_array data, limit
+    count = data.count
+    return data if count <= limit
+    result = []
+    if count > 0 and limit > 0
+      step = count / limit
+      indexes = (0..count-1).step(step).to_a
+      indexes.each { |i| result << data[i] }
+    end
+    result
+  end
+
+  def sql_sanitize array_sql_values
+    ActiveRecord::Base.send :sanitize_sql_array, array_sql_values
   end
 
 end

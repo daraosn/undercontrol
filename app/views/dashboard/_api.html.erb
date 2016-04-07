@@ -25,10 +25,14 @@
         <div class="panel panel-default">
             <div class="panel-heading">Testing Area</div>
             <div class="panel-body">
-                <%= text_field_tag(:value) %>       <!-- TODO: Connect LLogic -->
-                <div class="btn btn-success">
+                <div class="input-group">
+                  <input type="number" class="form-control" placeholder="Enter a numeric value..." ng-model="newMeasurement">
+                  <span class="input-group-btn">
+                    <button class="btn btn-success" type="button" ng-click="addMeasurement()">
                         <%= icon('send-o')%>
                         Send Value
+                    </button>
+                  </span>
                 </div>
             </div>
         </div>
@@ -66,7 +70,7 @@
                     <div class="api-url-text">
                         <%= api_v1_measurements_url %><br>
                         ?api_key=<span style="color:green">{{ thing.api_key }}</span><br>
-                        &amp;value=<span style="color:green">{{ thing.randomValue }}</span><br>
+                        &amp;value=<span style="color:green">{{ randomValue }}</span><br>
                     </div>
                 </div>
             </div>
@@ -78,7 +82,7 @@
                         <input type="text" class="form-control">
                     </div>
                     <div class="api-url-text">
-                    mosquitto_pub -h mqtt.undercontrol.io -t topic -m things/measurements/<span style="color:green">{{ thing.api_key }}</span> -m <span style="color:green">{{ thing.randomValue }}</span>
+                    mosquitto_pub -h mqtt.undercontrol.io -t topic -m sensors/<span style="color:green">{{ thing.api_key }}</span> -m <span style="color:green">{{ thing.randomValue }}</span>
                     </div>
                 </div>
             </div>

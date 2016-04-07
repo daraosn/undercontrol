@@ -16,9 +16,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <%= icon 'history'%>
-                Historic Chart (last <span>{{ historicChartInterval }}</span>)
+                Historic Chart (last <span>{{ historicChartRange }}</span>)
                 <div class="pull-right">
-                    <select class="" ng-options="k as v for (k, v) in historicChartintervals" ng-model="historicChartInterval" ng-change="changeHistoricChartInterval()"></select>
+                    <select class="" ng-options="k as v for (k, v) in historicChartRanges" ng-model="historicChartRange" ng-change="changehistoricChartRange()"></select>
                 </div>
             </div>
             <div class="panel-body">
