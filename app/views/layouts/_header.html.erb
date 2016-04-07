@@ -46,6 +46,9 @@
         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1588"><a href="/">Platform</a><div class="magic_line line_visible" style="max-width: 79px;"></div></li>
         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1587"><a href="<%=home_url%>community/">Community</a><div class="magic_line" style="max-width: 92px;"></div></li>
         <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1517"><a href="<%=home_url%>blog?layout=grid">Blog</a><div class="magic_line" style="max-width: 39px;"></div></li>
+        <% unless current_user.blank? %>
+            <li><%= link_to 'Logout', destroy_user_session_path, method: :delete  %></li>
+        <% end %>
                             </ul>
                         </div>
                     </div>

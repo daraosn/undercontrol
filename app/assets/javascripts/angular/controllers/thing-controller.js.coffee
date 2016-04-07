@@ -1,4 +1,4 @@
-angular.module('App').controller 'ThingController', ($scope, $element) ->
+angular.module('App').controller 'ThingController', ($scope, $element, Thing) ->
     'ngInject'
     new class ThingController
       constructor: ->
@@ -24,6 +24,7 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
         $scope.deleteThing = @deleteThing
         $scope.showApiUrlTextbox = @showApiUrlTextbox
         $scope.hideApiUrlTextbox = @hideApiUrlTextbox
+        $scope.addMeasurement = @addMeasurement
         $scope.randomValue = Math.round Math.random() * 100
         $scope.realtimeStarted = false
 
@@ -47,6 +48,9 @@ angular.module('App').controller 'ThingController', ($scope, $element) ->
             $scope.things.splice($index, 1)
             @unloadThing()
         return
+
+      addMeasurement: ->
+        (new Thing).$addMeasurement api_key: $scope.thing.api_key, value: $scope.newMeasurement
 
       updateLastValue: (value, time) ->
         #TODO: #@historicData.push point

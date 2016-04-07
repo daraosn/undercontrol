@@ -4,6 +4,8 @@ class CreateThingsService
       thing = Thing.new(
         name: "Sensor #{i}",
         description: "Description #{i}",
+        sensor_type: "Type #{i}",
+        unit: "Unit #{i}",
         range_min: 20,
         range_max: 40,
         alarm_min: rand(20..25),

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160312115442) do
+ActiveRecord::Schema.define(version: 20160406111214) do
 
   create_table "measurements", force: :cascade do |t|
     t.datetime "created_at"
@@ -144,6 +144,8 @@ ActiveRecord::Schema.define(version: 20160312115442) do
     t.decimal  "alarm_min",                    precision: 12, scale: 3, default: 0.0
     t.integer  "alarm_threshold", limit: 4,                             default: 0
     t.boolean  "alarm_triggered",                                       default: false
+    t.string   "sensor_type",     limit: 255
+    t.string   "unit",            limit: 255
   end
 
   add_index "things", ["user_id"], name: "index_things_on_user_id", using: :btree
