@@ -2,15 +2,12 @@ class Thing < ActiveRecord::Base
   belongs_to :user
   has_many :measurements
 
-  before_create :set_api_key
+  before_create :reset_api_key!
+
+  has_one :api_key
 
   validates_inclusion_of :alarm_threshold, :in => 0..10
   validate :alarm_min_max
-
-  def reset_api_key!
-    self.set_api_key
-    save!
-  end
 
   def check_alarm
     # do not trigger alarm if alarm's action, threshold or range are invalid
@@ -47,13 +44,10 @@ class Thing < ActiveRecord::Base
   # Callbacks
   ###
 
-  def set_api_key
-    require 'securerandom'
-    # find a free api key (in case of collisions)
-    while Thing.find_by_api_key(new_api_key = SecureRandom.urlsafe_base64(20))
-    end
-    # set the free api key to the new instance
-    self.api_key = new_api_key
+  def reset_api_key!
+    self.api_key.delete if self.api_key
+    self.api_key = ApiKey.create!.generate_key!
+    self.save!
   end
 
   ###

@@ -55,6 +55,11 @@ class Api::V1::ThingsController < ApplicationController
     render json: thing
   end
 
+  def get_api_key
+    # TODO: we find the thing_id from authenticated user, improve security
+    render json: current_user.things.find(params[:thing_id]).with_api_key!
+  end
+
   def reset_api_key
     thing = current_user.things.find_by_api_key(params[:api_key])
     unless thing.blank?

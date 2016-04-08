@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160406111214) do
+ActiveRecord::Schema.define(version: 20160408000501) do
+
+  create_table "api_keys", force: :cascade do |t|
+    t.integer  "thing_id",   limit: 4
+    t.string   "key",        limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "api_keys", ["key"], name: "index_api_keys_on_key", using: :btree
+  add_index "api_keys", ["thing_id"], name: "index_api_keys_on_thing_id", using: :btree
 
   create_table "measurements", force: :cascade do |t|
     t.datetime "created_at"
@@ -134,7 +144,6 @@ ActiveRecord::Schema.define(version: 20160406111214) do
     t.datetime "created_at",                                                            null: false
     t.datetime "updated_at",                                                            null: false
     t.integer  "user_id",         limit: 4,                                             null: false
-    t.string   "api_key",         limit: 255
     t.string   "name",            limit: 255
     t.string   "description",     limit: 255
     t.decimal  "range_min",                    precision: 12, scale: 3, default: 0.0
