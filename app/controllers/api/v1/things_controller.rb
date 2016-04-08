@@ -16,6 +16,7 @@ class Api::V1::ThingsController < ApplicationController
       measurement.save!
       if measurement.persisted?
         Pusher.trigger("things-#{thing.api_key}-measurements", 'new', measurement.as_json) rescue false
+        Pusher.trigger("things-measurements-count", 'new', Measurement.count) rescue false
         return render json: { success: true, errors: [] }
       end
     else
