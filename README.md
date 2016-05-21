@@ -3,11 +3,24 @@ Undercontrol
 
 Open Source realtime Internet of Things Platform with MQTT and Web-sockets support.
 
+See it in action at http://platform.undercontrol.io
 
-Problems? Issues?
------------
+Project homepage: http://undercontrol.io
 
-Please open a Github issue or contact me at diego@undercontrol.io
+Features
+--------
+
+- Simple graphic interface
+
+![Dashboard](docs/dashboard.png)
+
+- Set alarms and triggers
+
+![Dashboard](docs/alarms.png)
+
+- MQTT Support
+
+![Dashboard](docs/mqtt.png)
 
 Ruby on Rails
 -------------
@@ -17,12 +30,13 @@ This application requires:
 - Ruby 2.3.0
 - Rails 4.2.5.1
 - MySQL Server
+- Pusher or similar (for web-sockets)
 - MQTT Server
 
 MQTT
 ----
 
-You can use Mosquito or your own implementation. Undercontrol is currently using a node service, if you feel lazy you can my implementation at `mqtt.undercontrol.io`,
+You can use Mosquito or your own implementation. Undercontrol is currently using a node service, if you feel lazy you can use my implementation at `mqtt.undercontrol.io`, it uses a code like (sorry for dirtiness, it's pretty stable though):
 
 ```node
 var mosca = require('mosca')
@@ -79,6 +93,11 @@ function setup() {
 }
 ```
 
+Problems? Issues? Collaborate?
+------------------------------
+
+Feel free to open a Github issue. For special inquiries you can also contact me at diego@undercontrol.io
+
 Author
 ------
 
@@ -92,7 +111,7 @@ Rodolfo del Valle <rodolfo@undercontrol.io>
 MIT License
 -----------
 
-Copyright (c) 2016 Diego Araos <diego@undercontrol.io> <d@wehack.it>
+Copyright (c) 2016 Diego Araos <diego@undercontrol.io>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
